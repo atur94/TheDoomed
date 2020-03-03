@@ -17,12 +17,10 @@ public class Controller : MonoBehaviour
 
     public LayerMask enemiesLayerMask;
 
-    [SerializeField]
-    private Vector3 lookVector;
+
 
     void Start()
     {
-        characterController = GetComponent<CharacterController>();
         player = GetComponent<Player>();
     }
 
@@ -35,14 +33,8 @@ public class Controller : MonoBehaviour
         _moveDirection.y -= gravity * Time.deltaTime;
 
         // Move the controller
-        characterController.Move(_moveDirection * Time.deltaTime);
-        if(characterController.velocity.magnitude > 1f)
-        {
-            var position = transform.position;
-            lookVector = Vector3.Lerp(lookVector,Vector3.ProjectOnPlane(position + _moveDirection, Vector3.up), 0.2f);
-            lookVector.y = position.y;
-            transform.LookAt(lookVector);
-        }
+        player.Move(_moveDirection, Time.deltaTime);
+
 
         Collider[] enemies = CheckForEnemiesInRange();
         Transform closestEnemy = GetClosestEnemyInRange(enemies);
@@ -54,6 +46,10 @@ public class Controller : MonoBehaviour
             }
         }
 
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            player.ApplyDisable(new Stun(player, 2f, 1));
+        }
     }
 
     private Collider[] CheckForEnemiesInRange()

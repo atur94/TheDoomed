@@ -14,20 +14,7 @@ public class EnemySelectorSystem : MonoBehaviour
         for (int i = 0; i < allEnemiesTypes.Length; i++)
         {
             GameCharacterType newEnemyType = allEnemiesTypes[i];
-            Enemy newEnemy = new Enemy(i,
-                newEnemyType.characterName,
-                newEnemyType.characterPrefab,
-                newEnemyType.maxHealth,
-                newEnemyType.maxHealth,
-                newEnemyType.mana,
-                newEnemyType.healthRegenPerRound,
-                newEnemyType.manaRegenPerRound,
-                newEnemyType.attackDamage,
-                newEnemyType.attackSpeed,
-                newEnemyType.armor,
-                newEnemyType.magicReduction,
-                newEnemyType.projectileDefault, 
-                0f);
+            Enemy newEnemy = new Enemy(i, newEnemyType);
             allEnemies[i] = newEnemy;
             print($"Enemy {newEnemy.characterName} added to dictionary");
         }

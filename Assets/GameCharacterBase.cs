@@ -9,32 +9,52 @@ public class GameCharacterBase : MonoBehaviour
     public int maxHealth;
     public int currentHealth;
     public int mana;
+    public int manaPerLevel;
     public int healthRegenPerRound;
+    public int healthRegenPerRoundPerLevel;
     public int manaRegenPerRound;
+    public int manaRegenPerRoundPerLevel;
     public int attackDamage;
+    public int attackDamagePerLevel;
     public float attackSpeed;
+    public float attackSpeedPerLevel;
     public int armor;
+    public int armorPerLevel;
     public int magicReduction;
+    public int magicReductionPerLevel;
+    public int level;
+    public int currentExperience;
+
+    protected int[] ExperienceForLevel;
+
     public GameObject projectileDefault;
 
     [SerializeField] protected float timeBetweenAttacks;
 
-    public GameCharacterBase(int enemyId, string characterName, GameObject characterPrefab, int maxHealth, int currentHealth, int mana, int healthRegenPerRound, int manaRegenPerRound, int attackDamage, float attackSpeed, int armor, int magicReduction, GameObject projectileDefault, float timeBetweenAttacks)
+    public GameCharacterBase(int enemyId, GameCharacterType gameCharacterType)
     {
         this.enemyId = enemyId;
-        this.characterName = characterName;
-        this.characterPrefab = characterPrefab;
-        this.maxHealth = maxHealth;
-        this.currentHealth = currentHealth;
-        this.mana = mana;
-        this.healthRegenPerRound = healthRegenPerRound;
-        this.manaRegenPerRound = manaRegenPerRound;
-        this.attackDamage = attackDamage;
-        this.attackSpeed = attackSpeed;
-        this.armor = armor;
-        this.magicReduction = magicReduction;
-        this.projectileDefault = projectileDefault;
-        this.timeBetweenAttacks = timeBetweenAttacks;
+        this.characterName = gameCharacterType.characterName;
+        this.characterPrefab = gameCharacterType.characterPrefab;
+        this.maxHealth = gameCharacterType.maxHealth;
+        this.currentHealth = gameCharacterType.currentHealth;
+        this.mana = gameCharacterType.mana;
+        this.manaPerLevel = gameCharacterType.manaPerLevel;
+        this.healthRegenPerRound = gameCharacterType.healthRegenPerRound;
+        this.healthRegenPerRoundPerLevel = gameCharacterType.healthRegenPerRoundPerLevel;
+        this.manaRegenPerRound = gameCharacterType.manaRegenPerRound;
+        this.manaRegenPerRoundPerLevel = gameCharacterType.manaRegenPerRoundPerLevel;
+        this.attackDamage = gameCharacterType.attackDamage;
+        this.attackDamagePerLevel = gameCharacterType.attackDamagePerLevel;
+        this.attackSpeed = gameCharacterType.attackSpeed;
+        this.attackSpeedPerLevel = gameCharacterType.attackSpeedPerLevel;
+        this.armor = gameCharacterType.armor;
+        this.armorPerLevel = gameCharacterType.armorPerLevel;
+        this.magicReduction = gameCharacterType.magicReduction;
+        this.magicReductionPerLevel = gameCharacterType.magicReductionPerLevel;
+        this.level = gameCharacterType.level;
+        this.currentExperience = gameCharacterType.currentExperience;
+        this.projectileDefault = gameCharacterType.projectileDefault;
     }
 }
 
@@ -46,12 +66,20 @@ public struct GameCharacterType
     public int maxHealth;
     public int currentHealth;
     public int mana;
+    public int manaPerLevel;
     public int healthRegenPerRound;
+    public int healthRegenPerRoundPerLevel;
     public int manaRegenPerRound;
+    public int manaRegenPerRoundPerLevel;
     public int attackDamage;
+    public int attackDamagePerLevel;
     public float attackSpeed;
+    public float attackSpeedPerLevel;
     public int armor;
+    public int armorPerLevel;
     public int magicReduction;
+    public int magicReductionPerLevel;
+    public int level;
+    public int currentExperience;
     public GameObject projectileDefault;
-    public int enemyId;
 }

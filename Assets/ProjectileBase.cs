@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectileBase : MonoBehaviour
@@ -6,6 +7,8 @@ public class ProjectileBase : MonoBehaviour
     public int damage;
     public float speed;
     public Vector3 direction;
+    public bool hit { get; set; }
+    protected List<Disable> Disables;
 
     public Rigidbody rb;
 
@@ -14,6 +17,7 @@ public class ProjectileBase : MonoBehaviour
         this.damage = damage;
         this.speed = speed;
         this.direction = direction;
+        Disables = new List<Disable>();
     }
 }
 

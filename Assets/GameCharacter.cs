@@ -1,17 +1,28 @@
 ﻿using System;
+using Boo.Lang;
 using UnityEngine;
 
 
 public class GameCharacter : GameCharacterBase
 {
-    private HealthBar healthBar;
-    
+    private StatusBar statusBar;
 
+    public bool isStunned;
+    
+    private CharacterController characterController;
+    
+    [SerializeField]
+    private Vector3 lookVector;
+
+    private List<Disable> Disables;
 
     public void Start()
     {
-        healthBar = GetComponentInChildren<HealthBar>();
-        healthBar.SetHealthPointsPercentage(1f);
+        statusBar = GetComponentInChildren<StatusBar>();
+        statusBar.SetHealthPointsPercentage(1f);
+        characterController = GetComponent<CharacterController>();
+        Disables = new List<Disable>();
+
     }
 
     public void Attack(Transform enemy)
@@ -21,17 +32,14 @@ public class GameCharacter : GameCharacterBase
         transform.LookAt(enemy);
         if (Math.Abs(timeBetweenAttacks) > 0.01f) return;
 
-        ProjectileType projectileType;
+        ProjectileType projectileType = default;
         projectileType.damage = attackDamage;
-        projectileType.speed = 10f;
+        projectileType.speed = 30f;
+        projectileType.direction = (enemy.position - transform.position).normalized;
 
-        
+
         var projectileObject = Instantiate(projectileDefault, transform.position, Quaternion.identity);
-        var projectile = projectileObject.AddComponent<Projectile>();
-        projectile.damage = attackDamage;
-        projectile.speed = 30f;
-        var direction = (enemy.position - transform.position).normalized;
-        projectile.direction = direction;
+        Projectile.CreateProjectile(projectileObject, projectileType);
         timeBetweenAttacks = 1 / attackSpeed;
     }
 
@@ -42,7 +50,7 @@ public class GameCharacter : GameCharacterBase
         if (currentHealth > calculatedDamage)
         {
             currentHealth -= (int)calculatedDamage;
-            healthBar.SetHealthPointsPercentage(currentHealth/(float)maxHealth);
+            statusBar.SetHealthPointsPercentage(currentHealth/(float)maxHealth);
         }
         else
         {
@@ -56,6 +64,8 @@ public class GameCharacter : GameCharacterBase
 
     void FixedUpdate()
     {
+        DisableAllStates();
+        ApplyEffects();
         if (timeBetweenAttacks > Time.fixedDeltaTime)
         {
 
@@ -65,10 +75,77 @@ public class GameCharacter : GameCharacterBase
         {
             timeBetweenAttacks = 0;
         }
+
+        
     }
 
-    public GameCharacter(int enemyId, string characterName, GameObject characterPrefab, int maxHealth, int currentHealth, int mana, int healthRegenPerRound, int manaRegenPerRound, int attackDamage, float attackSpeed, int armor, int magicReduction, GameObject projectileDefault, float timeBetweenAttacks) : base(enemyId, characterName, characterPrefab, maxHealth, currentHealth, mana, healthRegenPerRound, manaRegenPerRound, attackDamage, attackSpeed, armor, magicReduction, projectileDefault, timeBetweenAttacks)
+    private void DisableAllStates()
     {
+        isStunned = false;
     }
+
+    private void ApplyEffects()
+    {
+        List<Disable> disablesToRemove = new List<Disable>();
+        for (int i = 0; i < Disables.Count; i++)
+        {
+            Disable disable = Disables[i];
+            if (disable.CanBeRemoved) disablesToRemove.Add(disable);
+            else disable.Update(Time.fixedDeltaTime);
+        }
+
+        for (int i = 0; i < disablesToRemove.Count; i++)
+        {
+            Disables.Remove(disablesToRemove[i]);
+        }
+        
+    }
+
+    public void ApplyDisable(Disable appliedDisable)
+    {
+        if (appliedDisable.Stackable)
+        {
+            Disables.Add(appliedDisable);
+            return;
+        }
+
+        for (var i = 0; i < Disables.Count; i++)
+        {
+            var disable = Disables[i];
+            if (disable.Id == appliedDisable.Id)
+            {
+                disable.TimeLeft = appliedDisable.TimeLeft;
+                return;
+            }
+        }
+
+        Disables.Add(appliedDisable);
+
+    }
+
+    public void RemoveDisableFromDisables(Disable removeDisable)
+    {
+        
+    }
+
+    public virtual void Move(Vector3 motion, float timeRes)
+    {
+        if(characterController != null)
+        {
+            if(!isStunned)
+            {
+                characterController.Move(motion * timeRes);
+                if (characterController.velocity.magnitude > 1f)
+                {
+                    var position = transform.position;
+                    lookVector = Vector3.Lerp(lookVector, Vector3.ProjectOnPlane(position + motion, Vector3.up), 0.2f);
+                    lookVector.y = position.y;
+                    transform.LookAt(lookVector);
+                }
+            }
+        }
+    }
+
+    public GameCharacter(int enemyId, GameCharacterType gameCharacterType) : base(enemyId, gameCharacterType) { }
 }
 

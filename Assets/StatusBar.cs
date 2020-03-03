@@ -1,24 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
-public class HealthBar : MonoBehaviour
+public class StatusBar : MonoBehaviour
 {
-    private Transform _healthBarPanel;
-
-    public void Start()
-    {
-        var componenets = GetComponentsInChildren<Transform>();
-        foreach (var componenet in componenets)
-        {
-            if (componenet.tag.Equals("HealthBar"))
-            {
-                _healthBarPanel = componenet;
-                return;
-            }
-        }
-    }
+    public Transform HealthBar;
+    public TextMeshPro TextMesh;
 
     public void LateUpdate()
     {
@@ -30,6 +19,6 @@ public class HealthBar : MonoBehaviour
         if (percentage > 100 || percentage < 0) return;
         Vector3 percentageVector = new Vector3(1, 1, 1);
         percentageVector[0] = percentage;
-        _healthBarPanel.localScale = percentageVector;
+        HealthBar.localScale = percentageVector;
     }
 }
