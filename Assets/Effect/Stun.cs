@@ -1,22 +1,15 @@
-﻿public class Stun : Disable
+﻿public class Stun : Status
 {
-    public Stun(GameCharacter gameCharacter, float duration, int id, bool stackable = false) : base(ref gameCharacter)
+    public Stun(GameCharacter gameCharacter, float duration, int id, bool stackable = false) : base(ref gameCharacter, duration, id, stackable)
     {
-        this.Duration = duration;
-        this.TimeLeft = duration;
-        id = 1;
-        Stackable = stackable;
     }
 
-    public Stun(GameCharacter gameCharacter, Disable disable) : base(ref gameCharacter)
+    public Stun(GameCharacter gameCharacter, Status status) : base(ref gameCharacter, status)
     {
-        Duration = disable.Duration;
-        TimeLeft = disable.Duration;
-        Id = disable.Id;
-        Stackable = disable.Stackable;
+
     }
 
-    protected override void OnDisableDuring()
+    protected override void OnStatusDuring()
     {
         gameCharacter.isStunned = true;
     }

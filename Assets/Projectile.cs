@@ -18,7 +18,7 @@ public class Projectile : ProjectileBase
         projectile.damage = projectileType.damage;
         projectile.speed = projectileType.speed;
         projectile.direction = projectileType.direction;
-        projectile.Disables = new List<Disable>();
+        projectile.Disables = new List<Status>();
         return projectile;
     }
     public void Start()

@@ -8,7 +8,7 @@ public class ProjectileBase : MonoBehaviour
     public float speed;
     public Vector3 direction;
     public bool hit { get; set; }
-    protected List<Disable> Disables;
+    protected List<Status> Disables;
 
     public Rigidbody rb;
 
@@ -17,7 +17,7 @@ public class ProjectileBase : MonoBehaviour
         this.damage = damage;
         this.speed = speed;
         this.direction = direction;
-        Disables = new List<Disable>();
+        Disables = new List<Status>();
     }
 }
 

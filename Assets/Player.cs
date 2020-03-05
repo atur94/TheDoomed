@@ -6,11 +6,11 @@ public class Player : GameCharacter
 
     public void Awake()
     {
-        maxHealth = 100;
-        attackSpeed = 1f;
-        attackDamage = 25;
-        currentHealth = 100;
-        healthRegenPerRound = 30;
-        mana = 30;
+        maxHealthBase = 100;
+        attackSpeedBase = 1f;
+        attackDamageBase = 25;
+        currentHealthBase = 100;
+        maxManaBase = 30;
+        movementSpeedBase = 300f;
     }
 }

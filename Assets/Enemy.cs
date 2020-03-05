@@ -8,10 +8,10 @@ public class Enemy : GameCharacter
     public void Awake()
     {
         characterName = gameObject.name;
-        maxHealth = 100;
-        currentHealth = 100;
-        attackDamage = 10;
+        maxHealthBase = 100;
+        currentHealthBase = 100;
+        attackDamageBase = 10;
         characterPrefab = null;
-        attackSpeed = 0.5f;
+        attackSpeedBase = 0.5f;
     }
 }

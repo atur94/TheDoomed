@@ -28,8 +28,7 @@ public class Controller : MonoBehaviour
     {
 
         _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
-        _moveDirection *= speed;
-        _isMoving = _moveDirection.magnitude > 0.1f;
+        _isMoving = _moveDirection.magnitude > 0.03f;
         _moveDirection.y -= gravity * Time.deltaTime;
 
         // Move the controller
@@ -44,6 +43,11 @@ public class Controller : MonoBehaviour
             {
                 player.Attack(closestEnemy);
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            player.ApplyDisable(new Slow(player, 0.3f, 2, 2, true));
         }
 
         if (Input.GetKeyDown(KeyCode.L))

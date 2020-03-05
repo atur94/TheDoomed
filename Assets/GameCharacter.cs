@@ -8,20 +8,32 @@ public class GameCharacter : GameCharacterBase
     private StatusBar statusBar;
 
     public bool isStunned;
-    
+
     private CharacterController characterController;
     
     [SerializeField]
     private Vector3 lookVector;
 
-    private List<Disable> Disables;
+    public float movmentSpeedCalculation = 0f;
+    private float CalculatedMovementSpeed
+    {
+        get
+        {
+            float speed = movementSpeedBase * (1 - movmentSpeedCalculation);
+            return speed;
+        }
+    }
+
+    [SerializeField]
+    public List<Status> Statuses;
+
 
     public void Start()
     {
         statusBar = GetComponentInChildren<StatusBar>();
         statusBar.SetHealthPointsPercentage(1f);
         characterController = GetComponent<CharacterController>();
-        Disables = new List<Disable>();
+        Statuses = new List<Status>();
 
     }
 
@@ -33,29 +45,29 @@ public class GameCharacter : GameCharacterBase
         if (Math.Abs(timeBetweenAttacks) > 0.01f) return;
 
         ProjectileType projectileType = default;
-        projectileType.damage = attackDamage;
+        projectileType.damage = attackDamageBase;
         projectileType.speed = 30f;
         projectileType.direction = (enemy.position - transform.position).normalized;
 
 
         var projectileObject = Instantiate(projectileDefault, transform.position, Quaternion.identity);
         Projectile.CreateProjectile(projectileObject, projectileType);
-        timeBetweenAttacks = 1 / attackSpeed;
+        timeBetweenAttacks = 1 / attackSpeedBase;
     }
 
     public void TakeDamage(int damage)
     {
-        double damageMultiplication = 1 - (0.052 * armor) / (0.9 + 0.048 * Mathf.Abs(armor));
+        double damageMultiplication = 1 - (0.052 * armorBase) / (0.9 + 0.048 * Mathf.Abs(armorBase));
         var calculatedDamage = damage * damageMultiplication;
-        if (currentHealth > calculatedDamage)
+        if (currentHealthBase > calculatedDamage)
         {
-            currentHealth -= (int)calculatedDamage;
-            statusBar.SetHealthPointsPercentage(currentHealth/(float)maxHealth);
+            currentHealthBase -= (int)calculatedDamage;
+            statusBar.SetHealthPointsPercentage(currentHealthBase/(float)maxHealthBase);
         }
         else
         {
-            currentHealth = 0;
-            Debug.Log(currentHealth);
+            currentHealthBase = 0;
+            Debug.Log(currentHealthBase);
 
             Destroy(gameObject);
         }
@@ -82,48 +94,49 @@ public class GameCharacter : GameCharacterBase
     private void DisableAllStates()
     {
         isStunned = false;
+        movmentSpeedCalculation = 0f;
     }
 
     private void ApplyEffects()
     {
-        List<Disable> disablesToRemove = new List<Disable>();
-        for (int i = 0; i < Disables.Count; i++)
+        List<Status> statusesToRemove = new List<Status>();
+        for (int i = 0; i < Statuses.Count; i++)
         {
-            Disable disable = Disables[i];
-            if (disable.CanBeRemoved) disablesToRemove.Add(disable);
-            else disable.Update(Time.fixedDeltaTime);
+            Status status = Statuses[i];
+            if (status.CanBeRemoved) statusesToRemove.Add(status);
+            else status.Update(Time.fixedDeltaTime);
         }
 
-        for (int i = 0; i < disablesToRemove.Count; i++)
+        for (int i = 0; i < statusesToRemove.Count; i++)
         {
-            Disables.Remove(disablesToRemove[i]);
+            Statuses.Remove(statusesToRemove[i]);
         }
         
     }
 
-    public void ApplyDisable(Disable appliedDisable)
+    public void ApplyDisable(Status appliedStatus)
     {
-        if (appliedDisable.Stackable)
+        if (appliedStatus.Stackable)
         {
-            Disables.Add(appliedDisable);
+            Statuses.Add(appliedStatus);
             return;
         }
 
-        for (var i = 0; i < Disables.Count; i++)
+        for (var i = 0; i < Statuses.Count; i++)
         {
-            var disable = Disables[i];
-            if (disable.Id == appliedDisable.Id)
+            var status = Statuses[i];
+            if (status.Id == appliedStatus.Id)
             {
-                disable.TimeLeft = appliedDisable.TimeLeft;
+                status.TimeLeft = appliedStatus.TimeLeft;
                 return;
             }
         }
 
-        Disables.Add(appliedDisable);
+        Statuses.Add(appliedStatus);
 
     }
 
-    public void RemoveDisableFromDisables(Disable removeDisable)
+    public void RemoveStatusFromStatuses(Status removeStatus)
     {
         
     }
@@ -134,7 +147,7 @@ public class GameCharacter : GameCharacterBase
         {
             if(!isStunned)
             {
-                characterController.Move(motion * timeRes);
+                characterController.Move(timeRes * CalculatedMovementSpeed * 0.05f * motion);
                 if (characterController.velocity.magnitude > 1f)
                 {
                     var position = transform.position;
