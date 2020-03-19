@@ -22,6 +22,7 @@ public class Controller : MonoBehaviour
     void Start()
     {
         player = GetComponent<Player>();
+        characterController = GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -41,18 +42,20 @@ public class Controller : MonoBehaviour
         {
             if(!_isMoving)
             {
-                player.Attack(closestEnemy);
+//                player.Attack(closestEnemy);
             }
         }
 
         if (Input.GetKeyDown(KeyCode.K))
         {
-            player.ApplyDisable(new Slow(player, 0.3f, 2, 2, true));
+//            player.ApplyDisable(new Slow(player, 0.3f, 2, 2, true));
         }
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            player.ApplyDisable(new Stun(player, 2f, 1));
+//            player.ApplyDisable(new Stun(player, 2f, 1));
+            player.DealDamage(new Damage(5f, 5f));
+            player.BurnMana(5f);
         }
     }
 

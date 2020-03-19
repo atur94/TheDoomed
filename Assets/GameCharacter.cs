@@ -1,5 +1,5 @@
 ﻿using System;
-using Boo.Lang;
+using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -45,7 +45,7 @@ public class GameCharacter : GameCharacterBase
         if (Math.Abs(timeBetweenAttacks) > 0.01f) return;
 
         ProjectileType projectileType = default;
-        projectileType.damage = attackDamageBase;
+        projectileType.damage = (int)attackDamage;
         projectileType.speed = 30f;
         projectileType.direction = (enemy.position - transform.position).normalized;
 
@@ -57,17 +57,17 @@ public class GameCharacter : GameCharacterBase
 
     public void TakeDamage(int damage)
     {
-        double damageMultiplication = 1 - (0.052 * armorBase) / (0.9 + 0.048 * Mathf.Abs(armorBase));
+        double damageMultiplication = 1 - (0.052 * physicalDefenseBase) / (0.9 + 0.048 * Mathf.Abs(physicalDefenseBase));
         var calculatedDamage = damage * damageMultiplication;
-        if (currentHealthBase > calculatedDamage)
+        if (currentHealth > calculatedDamage)
         {
-            currentHealthBase -= (int)calculatedDamage;
-            statusBar.SetHealthPointsPercentage(currentHealthBase/(float)maxHealthBase);
+            currentHealth -= (int)calculatedDamage;
+            statusBar.SetHealthPointsPercentage(currentHealth/(float)maxHealthBase);
         }
         else
         {
-            currentHealthBase = 0;
-            Debug.Log(currentHealthBase);
+            currentHealth = 0;
+            Debug.Log(currentHealth);
 
             Destroy(gameObject);
         }

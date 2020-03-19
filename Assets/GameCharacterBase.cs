@@ -22,8 +22,18 @@ public class GameCharacterBase : MonoBehaviour
     public float attackSpeedBase;
     public float attackRangeBase;
     public float movementSpeedBase;
-    public float armorBase;
-    public float magicReductionBase;
+    public float physicalDefenseBase;
+    public float magicDefenseBase;
+    public float criticalChanceBase;
+    public float evasionChanceBase;
+    public float accuracyBase;
+    
+
+    [Header("Base stats")]
+    public float vitalityBase;
+    public float strengthBase;
+    public float agilityBase;
+    public float intelligenceBase;
 
     [Header("Base per level stats")]
     public float healthPerLevelBase;
@@ -53,60 +63,13 @@ public class GameCharacterBase : MonoBehaviour
     public float healthPerLevel;
     public int manaPerLevel;
     public int attackDamagePerLevel;
-    public float attackSpeedPerLevel;
-    public float healthRegenPerLevel;
-    public float manaRegenPerLevel;
-    public float armorPerLevel;
-    public float magicReductionPerLevel;
 
-    [Header("Flat mana and health")]
-    public float currentHealthRegenFlat;
-    public float currentManaRegenFlat;
-
-    [Header("Flat character statistics")]
-    public float maxHealthFlat;
-    public float maxManaFlat;
-    public float attackDamageFlat;
-    public float attackSpeedFlat;
-    public float attackRangeFlat;
-    public float movementSpeedFlat;
-    public float armorFlat;
-    public float magicReductionFlat;
-
-    [Header("Flat per level stats")]
-    public float healthPerLevelFlat;
-    public int manaPerLevelFlat;
-    public int attackDamagePerLevelFlat;
-    public float attackSpeedPerLevelFlat;
-    public float healthRegenPerLevelFlat;
-    public float manaRegenPerLevelFlat;
-    public float armorPerLevelFlat;
-    public float magicReductionPerLevelFlat;
-
-    [Header("Percent character statistics")]
-    public float maxHealthPercent;
-    public float maxManaPercent;
-    public float attackDamagePercent;
-    public float attackSpeedPercent;
-    public float attackRangePercent;
-    public float movementSpeedPercent;
-    public float armorPercent;
-    public float magicReductionPercent;
-
-    [Header("Percent per level stats")]
-    public float healthPerLevelPercent;
-    public int manaPerLevelPercent;
-    public int attackDamagePerLevelPercent;
-    public float attackSpeedPerLevelPercent;
-    public float healthRegenPerLevelPercent;
-    public float manaRegenPerLevelPercent;
-    public float armorPerLevelPercent;
-    public float magicReductionPerLevelPercent;
 
     [Header("Levels")]
     public int level;
     public int currentExperience;
     protected int[] ExperienceForLevel;
+
 
     [Header("Textures and models")]
     public GameObject projectileDefault;
@@ -131,8 +94,8 @@ public class GameCharacterBase : MonoBehaviour
         attackRangeBase = gameCharacterType.attackRangeBase;
         attackType = gameCharacterType.attackType;
         movementSpeedBase = gameCharacterType.movementSpeedBase;
-        armorBase = gameCharacterType.armorBase;
-        magicReductionBase = gameCharacterType.magicReductionBase;
+        physicalDefenseBase = gameCharacterType.armorBase;
+        magicDefenseBase = gameCharacterType.magicReductionBase;
 
         healthPerLevelBase = gameCharacterType.healthPerLevelBase;
         manaPerLevelBase = gameCharacterType.manaPerLevelBase;
