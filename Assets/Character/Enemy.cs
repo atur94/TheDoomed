@@ -1,11 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class Enemy : GameCharacter
+public class Enemy : Character
 {
-    public Enemy(int enemyId, GameCharacterType gameCharacterType) : base(enemyId, gameCharacterType) { }
+    private KeyValuePair<int, string> _group = new KeyValuePair<int, string>(100, "Monsters");
 
-
-    public void Awake()
-    {
-    }
+    public override KeyValuePair<int, string> @group => _group;
 }

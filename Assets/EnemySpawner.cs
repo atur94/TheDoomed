@@ -40,11 +40,11 @@ public class EnemySpawner : MonoBehaviour
 
             if (_canBuild && _currentEnemyTemplate == null)
             {
-                Enemy spawnEnemy = _enemySelectorSystem.allEnemies[0];
-                _currentEnemyTemplate = Instantiate(spawnEnemy.characterPrefab, _spawnPoint, Quaternion.identity);
-                _currentEnemyTemplate.layer = 2;
-                Enemy spawnedEnemy = _currentEnemyTemplate.AddComponent<Enemy>();
-                spawnedEnemy = spawnEnemy;
+//                Enemy spawnEnemy = _enemySelectorSystem.allEnemies[0];
+//                _currentEnemyTemplate = Instantiate(spawnEnemy.characterPrefab, _spawnPoint, Quaternion.identity);
+//                _currentEnemyTemplate.layer = 2;
+//                Enemy spawnedEnemy = _currentEnemyTemplate.AddComponent<Enemy>();
+//                spawnedEnemy = spawnEnemy;
             }
 
             if (_canBuild && _currentEnemyTemplate != null)

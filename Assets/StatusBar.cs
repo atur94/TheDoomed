@@ -44,7 +44,7 @@ public class StatusBar : MonoBehaviour
         float percentage = currentHealth / maxHealth;
 
         SetHealthPointsPercentage(percentage);
-        HealthText.SetText($"hp: {maxHealth}/{currentHealth}");
+        HealthText.SetText($"hp: {maxHealth}/{(int)currentHealth}");
     }
 
     public void SetManaPoints(float currentMana, float maxMana)
@@ -52,6 +52,6 @@ public class StatusBar : MonoBehaviour
         float percentage = currentMana / maxMana;
 
         SetManaPointPercentage(percentage);
-        ManaText.SetText($"mp: {maxMana}/{currentMana}");
+        ManaText.SetText($"mp: {maxMana}/{(int)currentMana}");
     }
 }

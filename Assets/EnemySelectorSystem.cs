@@ -13,10 +13,10 @@ public class EnemySelectorSystem : MonoBehaviour
     {
         for (int i = 0; i < allEnemiesTypes.Length; i++)
         {
-            GameCharacterType newEnemyType = allEnemiesTypes[i];
-            Enemy newEnemy = new Enemy(i, newEnemyType);
-            allEnemies[i] = newEnemy;
-            print($"Enemy {newEnemy.characterName} added to dictionary");
+//            GameCharacterType newEnemyType = allEnemiesTypes[i];
+//            Enemy newEnemy = new Enemy(i, newEnemyType);
+//            allEnemies[i] = newEnemy;
+//            print($"Enemy {newEnemy.characterName} added to dictionary");
         }
     }
 }

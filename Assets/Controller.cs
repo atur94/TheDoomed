@@ -19,31 +19,31 @@ public class Controller : MonoBehaviour
 
 
 
-    void Start()
+    public void Start()
     {
         player = GetComponent<Player>();
         characterController = GetComponent<CharacterController>();
     }
 
-    private void Update()
+    public void Loop()
     {
 
         _moveDirection = new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical"));
         _isMoving = _moveDirection.magnitude > 0.03f;
-        _moveDirection.y -= gravity * Time.deltaTime;
 
         // Move the controller
-        player.Move(_moveDirection, Time.deltaTime);
-
+//        if(_moveDirection.magnitude > 0.01f)
+        
 
         Collider[] enemies = CheckForEnemiesInRange();
         Transform closestEnemy = GetClosestEnemyInRange(enemies);
         if (Input.GetButton("NormalAttack"))
         {
-            if(!_isMoving)
-            {
-//                player.Attack(closestEnemy);
-            }
+            player.Attack(closestEnemy);
+        }
+        else
+        {
+            player.MovingDirection = _moveDirection;
         }
 
         if (Input.GetKeyDown(KeyCode.K))
@@ -62,6 +62,11 @@ public class Controller : MonoBehaviour
     private Collider[] CheckForEnemiesInRange()
     {
         var enemies = Physics.OverlapSphere(transform.position, 15f, enemiesLayerMask);
+        foreach (var enemy in enemies)
+        {
+            Debug.Log(enemy.transform.position);
+
+        }
         return enemies;
     }
 

@@ -10,20 +10,20 @@ public abstract partial class CharacterBase : MonoBehaviour
     protected int MaxLevel = 25;
     public Attributes BaseAttributes;
 
-    public void Start()
-    {
-    }
 
-    protected void Initialize()
-    {
-        InitializeList();
+    public float currentHealth;
 
+    public float currentMana;
+
+    protected void Initialize(Character character)
+    {
+        InitializeList(character);
     }
 }
 
 public class CommonAttribute
 {
-    public CharacterBase Character;
+    protected Character Character;
 
     protected float _base;
     public virtual float Base
@@ -34,14 +34,17 @@ public class CommonAttribute
         set => _base = value;
     }
 
+    [HideInInspector]
     public float StrengthCoef;
+    [HideInInspector]
     public float VitalityCoef;
+    [HideInInspector]
     public float AgilityCoef;
+    [HideInInspector]
     public float IntelligenceCoef;
-
-    public List<float> FlatBonusesList = new List<float>();
-    public List<float> PercentBonusesList = new List<float>();
-
+    [HideInInspector]
+    public AttributeType AttributeType;
+    [HideInInspector]
     public float PerLevel = 0f;
 
     public float FlatBonuses
@@ -49,9 +52,19 @@ public class CommonAttribute
         get
         {
             float sum = 0;
-            for (int i = 0; i < FlatBonusesList.Count; i++)
+            for (int i = 0; i < Character.itemSlots.Count; i++)
             {
-                sum += FlatBonusesList[i];
+                Base item = Character.itemSlots[i].itemInSlot;
+                if (item != null)
+                {
+                    for (int j = 0; j < item.StatsEffects.Count; j++)
+                    {
+                        AttributeSet attribute = item.StatsEffects[j];
+                        if (attribute.AttributeType == AttributeType)
+                            sum += attribute.FlatBonus;
+                    }
+
+                }
             }
 
             return sum;
@@ -63,11 +76,20 @@ public class CommonAttribute
         get
         {
             float sum = 0;
-            for (int i = 0; i < PercentBonusesList.Count; i++)
+            for (int i = 0; i < Character.itemSlots.Count; i++)
             {
-                sum += PercentBonusesList[i];
-            }
+                Base item = Character.itemSlots[i].itemInSlot;
+                if (item != null)
+                {
+                    for (int j = 0; j < item.StatsEffects.Count; j++)
+                    {
+                        AttributeSet attribute = item.StatsEffects[j];
+                        if(attribute.AttributeType == AttributeType)
+                            sum += attribute.PercentBonus;
+                    }
 
+                }
+            }
             return sum;
         }
     }
@@ -76,7 +98,7 @@ public class CommonAttribute
 
 
     public CommonAttribute(float baseAttribute, float vitalityCoef, float strengthCoef, float agilityCoef,
-        float intelligenceCoef, float perLevel, CharacterBase character)
+        float intelligenceCoef, float perLevel, Character character)
     {
         Character = character;
         _base = baseAttribute;
@@ -87,7 +109,7 @@ public class CommonAttribute
         PerLevel = perLevel;
     }
 
-    public CommonAttribute(InitialAttribute attribute, CharacterBase character)
+    public CommonAttribute(InitialAttribute attribute, Character character, AttributeType attributeType)
     {
         Character = character;
         _base = attribute.startingValue;
@@ -96,6 +118,7 @@ public class CommonAttribute
         AgilityCoef = attribute.agilityCoef;
         IntelligenceCoef = attribute.intelligenceCoef;
         PerLevel = attribute.perLevel;
+        AttributeType = attributeType;
     }
 }
 
@@ -111,11 +134,11 @@ public class MainAttribute : CommonAttribute
 
     public override float Value => (int)((Base + FlatBonuses) * (1 + PercentBonuses));
 
-    public MainAttribute(float baseAttribute, float perLevel, CharacterBase character) : base(baseAttribute, 0f, 0f, 0f, 0f, perLevel, character)
+    public MainAttribute(float baseAttribute, float perLevel, Character character, AttributeType attributeType) : base(baseAttribute, 0f, 0f, 0f, 0f, perLevel, character)
     {
     }
 
-    public MainAttribute(InitialAttribute attribute, CharacterBase character) : base(attribute, character)
+    public MainAttribute(InitialAttribute attribute, Character character, AttributeType attributeType) : base(attribute, character, attributeType)
     {
     }
 }
@@ -124,11 +147,11 @@ public class TimeAttribute : CommonAttribute
 {
     public override float Value => Base + PercentBonuses;
 
-    public TimeAttribute(float baseAttribute, float vitalityCoef, float strengthCoef, float agilityCoef, float intelligenceCoef, float perLevel, CharacterBase character) : base(baseAttribute, vitalityCoef, strengthCoef, agilityCoef, intelligenceCoef, perLevel, character)
+    public TimeAttribute(float baseAttribute, float vitalityCoef, float strengthCoef, float agilityCoef, float intelligenceCoef, float perLevel, Character character) : base(baseAttribute, vitalityCoef, strengthCoef, agilityCoef, intelligenceCoef, perLevel, character)
     {
     }
 
-    public TimeAttribute(InitialAttribute attribute, CharacterBase character) : base(attribute, character)
+    public TimeAttribute(InitialAttribute attribute, Character character, AttributeType attributeType) : base(attribute, character, attributeType)
     {
     }
 }
@@ -148,11 +171,11 @@ public class AttackSpeedAttribute : CommonAttribute
 
     public override float Value => Base * (1 + PercentBonuses);
 
-    public AttackSpeedAttribute(float baseAttribute, float vitalityCoef, float strengthCoef, float agilityCoef, float intelligenceCoef, float perLevel, CharacterBase character) : base(baseAttribute, vitalityCoef, strengthCoef, agilityCoef, intelligenceCoef, perLevel, character)
+    public AttackSpeedAttribute(float baseAttribute, float vitalityCoef, float strengthCoef, float agilityCoef, float intelligenceCoef, float perLevel, Character character) : base(baseAttribute, vitalityCoef, strengthCoef, agilityCoef, intelligenceCoef, perLevel, character)
     {
     }
 
-    public AttackSpeedAttribute(InitialAttribute attribute, CharacterBase character) : base(attribute, character)
+    public AttackSpeedAttribute(InitialAttribute attribute, Character character, AttributeType attributeType) : base(attribute, character, attributeType)
     {
     }
 }
@@ -162,8 +185,8 @@ public class AttackSpeedAttribute : CommonAttribute
 public struct InitialAttribute
 {
     public float startingValue;
-    public float strengthCoef;
     public float vitalityCoef;
+    public float strengthCoef;
     public float agilityCoef;
     public float intelligenceCoef;
     public float perLevel;
@@ -200,4 +223,5 @@ public struct Attributes
     public InitialAttribute fieldOfViewRangeDark;
     public InitialAttribute healthPerLevel;
     public InitialAttribute manaPerLevel;
+    public InitialAttribute turnRate;
 }

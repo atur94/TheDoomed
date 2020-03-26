@@ -1,9 +1,4 @@
-﻿
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEngine;
-using Debug = UnityEngine.Debug;
+﻿using UnityEngine;
 
 partial class CharacterBase
 {
@@ -11,7 +6,6 @@ partial class CharacterBase
     public MainAttribute strength;
     public MainAttribute agility;
     public MainAttribute intelligence;
-
     public CommonAttribute physicalAttack;
     public CommonAttribute magicPower;
     public CommonAttribute health;
@@ -28,41 +22,79 @@ partial class CharacterBase
     public CommonAttribute fieldOfViewAngle;
     public CommonAttribute fieldOfViewRangeLight;
     public CommonAttribute fieldOfViewRangeDark;
-
+    public CommonAttribute turnRate;
     public TimeAttribute channelingTimeReduction;
     public TimeAttribute castingTimeReduction;
     public TimeAttribute cooldownTimeReduction;
-
     public AttackSpeedAttribute attackSpeed;
+    public CommonAttribute attackWeaponRange;
 
-    public List<CommonAttribute> attributesAll = new List<CommonAttribute>();
 
-    private void InitializeList()
+    private void InitializeList(Character character)
     {
-        vitality = new MainAttribute(BaseAttributes.vitality, this);
-        strength = new MainAttribute(BaseAttributes.strength, this);
-        agility = new MainAttribute(BaseAttributes.agility, this);
-        intelligence = new MainAttribute(BaseAttributes.intelligence, this);
+        vitality = new MainAttribute(BaseAttributes.vitality, character, AttributeType.Vitality);
+        strength = new MainAttribute(BaseAttributes.strength, character, AttributeType.Strength);
+        agility = new MainAttribute(BaseAttributes.agility, character, AttributeType.Agility);
+        intelligence = new MainAttribute(BaseAttributes.intelligence, character, AttributeType.Intelligence);
 
-        physicalAttack = new CommonAttribute(BaseAttributes.physicalAttack, this);
-        magicPower = new CommonAttribute(BaseAttributes.magicPower, this);
-        health = new CommonAttribute(BaseAttributes.health, this);
-        mana = new CommonAttribute(BaseAttributes.mana, this);
-        physicalDefense = new CommonAttribute(BaseAttributes.physicalDefense, this);
-        magicalDefense = new CommonAttribute(BaseAttributes.magicalDefense, this);
-        criticalChance = new CommonAttribute(BaseAttributes.criticalChance, this);
-        criticalDamage = new CommonAttribute(BaseAttributes.criticalDamage, this);
-        evasion = new CommonAttribute(BaseAttributes.evasion, this);
-        accuracy = new CommonAttribute(BaseAttributes.accuracy, this);
-        movementSpeed = new CommonAttribute(BaseAttributes.movementSpeed, this);
-        healthRegen = new CommonAttribute(BaseAttributes.healthRegen, this);
-        manaRegen = new CommonAttribute(BaseAttributes.manaRegen, this);
-        fieldOfViewAngle = new CommonAttribute(BaseAttributes.fieldOfViewAngle, this);
-        fieldOfViewRangeLight = new CommonAttribute(BaseAttributes.fieldOfViewRangeLight, this);
-        fieldOfViewRangeDark = new CommonAttribute(BaseAttributes.fieldOfViewRangeDark, this);
+        physicalAttack = new CommonAttribute(BaseAttributes.physicalAttack, character, AttributeType.PhysicalAttack);
+        magicPower = new CommonAttribute(BaseAttributes.magicPower, character, AttributeType.MagicPower);
 
-        channelingTimeReduction = new TimeAttribute(BaseAttributes.channelingTime, this);
-        castingTimeReduction = new TimeAttribute(BaseAttributes.castingTime, this);
-        cooldownTimeReduction = new TimeAttribute(BaseAttributes.cooldownReduction, this);
+        health = new CommonAttribute(BaseAttributes.health, character, AttributeType.Health);
+        mana = new CommonAttribute(BaseAttributes.mana, character, AttributeType.Mana);
+
+        physicalDefense = new CommonAttribute(BaseAttributes.physicalDefense, character, AttributeType.PhysicalDefense);
+        magicalDefense = new CommonAttribute(BaseAttributes.magicalDefense, character, AttributeType.MagicalDefense);
+
+        criticalChance = new CommonAttribute(BaseAttributes.criticalChance, character, AttributeType.CriticalChance);
+        criticalDamage = new CommonAttribute(BaseAttributes.criticalDamage, character, AttributeType.CriticalDamage);
+
+        evasion = new CommonAttribute(BaseAttributes.evasion, character, AttributeType.Evasion);
+        accuracy = new CommonAttribute(BaseAttributes.accuracy, character, AttributeType.Accuracy);
+        movementSpeed = new CommonAttribute(BaseAttributes.movementSpeed, character, AttributeType.MovementSpeed);
+
+        healthRegen = new CommonAttribute(BaseAttributes.healthRegen, character, AttributeType.HealthRegen);
+        manaRegen = new CommonAttribute(BaseAttributes.manaRegen, character, AttributeType.ManaRegen);
+
+        fieldOfViewAngle = new CommonAttribute(BaseAttributes.fieldOfViewAngle, character, AttributeType.FieldOfViewAngle);
+        fieldOfViewRangeLight = new CommonAttribute(BaseAttributes.fieldOfViewRangeLight, character, AttributeType.FieldOfViewRangeLight);
+        fieldOfViewRangeDark = new CommonAttribute(BaseAttributes.fieldOfViewRangeDark, character, AttributeType.FieldOfViewRangeDark);
+        turnRate = new CommonAttribute(BaseAttributes.turnRate, character, AttributeType.TurnRate);
+
+        channelingTimeReduction = new TimeAttribute(BaseAttributes.channelingTime, character, AttributeType.ChannelingTimeReduction);
+        castingTimeReduction = new TimeAttribute(BaseAttributes.castingTime, character, AttributeType.CastingTimeReduction);
+        cooldownTimeReduction = new TimeAttribute(BaseAttributes.cooldownReduction, character, AttributeType.CooldownTimeReduction);
+
+        attackSpeed = new AttackSpeedAttribute(BaseAttributes.attackSpeed, character, AttributeType.AttackSpeed);
     }
+}
+
+public enum AttributeType
+{
+  Vitality,
+  Strength,
+  Agility,
+  Intelligence,
+  PhysicalAttack,
+  MagicPower,
+  Health,
+  Mana,
+  PhysicalDefense,
+  MagicalDefense,
+  CriticalChance,
+  CriticalDamage,
+  Evasion,
+  Accuracy,
+  MovementSpeed,
+  HealthRegen,
+  ManaRegen,
+  FieldOfViewAngle,
+  FieldOfViewRangeLight,
+  FieldOfViewRangeDark,
+  TurnRate,
+  ChannelingTimeReduction,
+  CastingTimeReduction,
+  CooldownTimeReduction,
+  AttackSpeed,
+  AttackWeaponRange
 }
