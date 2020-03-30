@@ -8,6 +8,8 @@ TagManager:
   - Wall
   - Enemy
   - HealthBar
+  - Inventory
+  - PlayerUI
   layers:
   - Default
   - TransparentFX

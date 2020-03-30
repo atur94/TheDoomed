@@ -17,10 +17,16 @@ public abstract class Character : CharacterBase
     public float[] experienceToLevelUp;
 
     public List<ItemSlot> itemSlots;
+    public ItemSlot backpackSlot;
+
     public ItemSlot weaponSlot;
 
     public List<Status> statuses;
     private float _currentHealth;
+
+    public Inventory inventory;
+
+    public virtual void LateInitialization() { }
 
     public void Start()
     {
@@ -30,18 +36,28 @@ public abstract class Character : CharacterBase
         characterController = GetComponent<CharacterController>();
         _controller = GetComponent<Controller>();
         InitializeSlots();
+        InitializeInventory();
         currentHealth = health.Value;
         currentMana = mana.Value;
+        LateInitialization();
     }
 
 
+    private void InitializeInventory()
+    {
+        inventory = Inventory.CreateInventory(this);
+    }
 
     private void InitializeSlots()
     {
-        weaponSlot = ScriptableObject.CreateInstance<ItemSlot>();
-        weaponSlot.character = this;
-        weaponSlot.itemTypeRestriction = typeof(Weapon);
+        weaponSlot = ItemSlot.CreateSlot(this, typeof(Weapon));
+
         weaponSlot.PlaceItem(ScriptableObject.CreateInstance<Weapon>());
+        backpackSlot = ItemSlot.CreateSlot(this, typeof(Backpack));
+        Backpack backpackDefault = ScriptableObject.CreateInstance<Backpack>();
+        backpackDefault.itemSlots = 5;
+        backpackSlot.PlaceItem(backpackDefault);
+        itemSlots.Add(backpackSlot);
         itemSlots.Add(weaponSlot);
     }
 
@@ -86,6 +102,7 @@ public abstract class Character : CharacterBase
     {
         disables.Reset();
         RegenerationPerSecond();
+        inventory.UpdateInventory();
 
     }
 
