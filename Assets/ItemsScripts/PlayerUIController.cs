@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class PlayerUIController : MonoBehaviour
+public class PlayerUIController : MonoBehaviour, IDropHandler
 {
     public GameObject UI;
     public RectTransform Info;
@@ -31,8 +31,38 @@ public class PlayerUIController : MonoBehaviour
     private GameObject _movable;
     private ItemSlot _selectedItemSlot;
     private ItemSlot _sourceItemSlot;
+    private ItemSlot _itemSlotOnHover;
 
     public Transform moveLayerParent;
+
+
+
+    void Start()
+    {
+        EventTrigger ent = UI.gameObject.AddComponent<EventTrigger>();
+        EventTrigger.Entry onMouseUp = new EventTrigger.Entry();
+        onMouseUp.eventID = EventTriggerType.Drop;
+        onMouseUp.callback.AddListener(DropItem);
+        ent.triggers.Add(onMouseUp);
+    }
+    public void DropItem(BaseEventData arg0)
+    {
+        if (_selectedItemSlot != null && _sourceItemSlot != null)
+        {
+            character.inventory.DropItem(_sourceItemSlot);
+        }
+    }
+
+
+    public void DropItem()
+    {
+        Debug.Log("Started");
+        if (_selectedItemSlot != null && _sourceItemSlot != null)
+        {
+            character.inventory.DropItem(_sourceItemSlot);
+        }
+    }
+
 
     // Update is called once per frame
     void Update()
@@ -108,16 +138,22 @@ public class PlayerUIController : MonoBehaviour
         switch (evntType)
         {
             case EventTriggerType.PointerUp:
-                Debug.Log($"UP {slot.slotNo}");
-                MoveFloatingSlot(slot);
+                MoveFloatingSlotInInventory(slot);
                 break;
             case EventTriggerType.BeginDrag:
-                Debug.Log($"Begin {slot.slotNo}");
                 CreateFloatingSlot(slot);
                 break;
             case EventTriggerType.EndDrag:
-                Debug.Log($"End {slot.slotNo}");
                 DestroyFloatingSlot(_selectedItemSlot);
+                break;
+            case EventTriggerType.PointerEnter:
+                if (slot.itemInSlot != null)
+                {
+                    _itemSlotOnHover = slot;
+                }
+                break;
+            case EventTriggerType.PointerExit:
+                _itemSlotOnHover = null;
                 break;
         }
     }
@@ -132,16 +168,18 @@ public class PlayerUIController : MonoBehaviour
         _sourceItemSlot.isSelected = true;
         _movable = _selectedItemSlot.itemSlotInstance = Instantiate(itemSlotPrefab, moveLayerParent.transform);
         _movable.GetComponent<RectTransform>().pivot = new Vector2(0.5f,0.5f);
+        _movable.layer = 14;
         _selectedItemSlot.itemSlotInstance.transform.SetParent(moveLayerParent);
         CanvasGroup  group = _movable.AddComponent<CanvasGroup>();
         group.blocksRaycasts = false;
         group.interactable = false;
+        group.ignoreParentGroups = false;
         _movable.name = "Moving";
         _movable.transform.position = sourceItemSlot.itemSlotInstance.transform.position;
 
     }
 
-    private void MoveFloatingSlot(ItemSlot targetSlot)
+    private void MoveFloatingSlotInInventory(ItemSlot targetSlot)
     {
         if (_selectedItemSlot == null) return;
         if (targetSlot.isLocked) {
@@ -151,9 +189,11 @@ public class PlayerUIController : MonoBehaviour
 
         if (targetSlot.CanBePlaced(_sourceItemSlot.itemInSlot))
         {
+            float hpPercentage = character.currentHealth / character.health.Value;
             Item tempItem = targetSlot.itemInSlot;
-            targetSlot.itemInSlot = _sourceItemSlot.itemInSlot;
+            targetSlot.PlaceItemInEquipment(_sourceItemSlot.itemInSlot);
             _sourceItemSlot.itemInSlot = tempItem;
+            character.currentHealth = hpPercentage * character.health.Value;
         }
 
         DestroyFloatingSlot(_selectedItemSlot);
@@ -171,4 +211,8 @@ public class PlayerUIController : MonoBehaviour
         }
     }
 
+    public void OnDrop(PointerEventData eventData)
+    {
+        Debug.Log("TETETETETE");
+    }
 }

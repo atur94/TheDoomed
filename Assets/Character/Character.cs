@@ -89,6 +89,7 @@ public abstract partial class Character : CharacterBase, IDamagable
         itemSlots.Add(orbSlot);
     }
 
+
     public void Awake()
     {
         itemSlots = new List<ItemSlot>();

@@ -58,6 +58,23 @@ public partial class ItemSlot : ScriptableObject
         }
     }
 
+
+    public void PlaceItemInEquipment(Item item)
+    {
+        float hpPercentage = character.currentHealth / character.health.Value;
+        float mpPercentage = character.currentMana / character.mana.Value;
+        itemInSlot = item;
+
+        if (!slotNo.HasValue)
+        {
+            if(Math.Abs(hpPercentage - character.currentHealth / character.health.Value) > 0.005f)
+                character.currentHealth = (hpPercentage > 0.04f ? hpPercentage - 0.04f : 0.04f) * character.health.Value;
+
+            if (Math.Abs(hpPercentage - character.currentMana / character.mana.Value) > 0.005f)
+                character.currentMana = (mpPercentage > 0.04f ? mpPercentage - 0.04f : 0.04f) * character.mana.Value;
+        }
+    }
+
     private Sprite SpriteSlotLocked => _uiController.spriteSlotLocked;
     private Sprite SpriteSlotUnlocked => _uiController.spriteSlotUnlocked;
     private Sprite SpriteSlotUndefined => _uiController.spriteSlotUndefined;
@@ -90,6 +107,8 @@ public partial class ItemSlot : ScriptableObject
                 tempSlot.itemInSlot = tempItem;
             }
         }
+
+        
     }
 
     public Item LastItem;

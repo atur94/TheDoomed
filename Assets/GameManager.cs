@@ -10,7 +10,8 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         Cursor.SetCursor(CursorTexture, Vector3.zero,CursorMode.Auto);
-
+        Physics.IgnoreLayerCollision(8,13);
+        Physics.IgnoreLayerCollision(9,13);
         controllableCharacter = FindObjectOfType<Player>();
     }
 }

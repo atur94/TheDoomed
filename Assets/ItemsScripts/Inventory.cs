@@ -26,7 +26,7 @@ public class Inventory : ScriptableObject
 
     public void PutItemToInventory(Item item)
     {
-        
+        if (_backpack == null) return;
         for (int i = 0; i < _backpack.itemSlots; i++)
         {
             ItemSlot currentSlot = inventorySlots[i];

@@ -7,7 +7,7 @@ public abstract partial class Character
         {
             if (eqSlot != null && eqSlot.itemInSlot == null && eqSlot.itemTypeRestriction == pickable._item.GetType() && eqSlot.CanBePlaced(pickable._item))
             {
-                eqSlot.itemInSlot = pickable._item;
+                eqSlot.PlaceItemInEquipment(pickable._item);
                 return;
             }
         }
