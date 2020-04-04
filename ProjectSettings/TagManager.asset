@@ -7,9 +7,9 @@ TagManager:
   - Fire
   - Wall
   - Enemy
-  - HealthBar
   - Inventory
   - PlayerUI
+  - ItemSlotInside
   layers:
   - Default
   - TransparentFX
@@ -24,7 +24,7 @@ TagManager:
   - Projectile
   - Wall
   - Floor
-  - 
+  - Item
   - 
   - 
   - 

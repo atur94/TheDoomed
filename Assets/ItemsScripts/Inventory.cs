@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 
@@ -8,6 +12,7 @@ public class Inventory : ScriptableObject
 {
     public ItemSlot backpackSlot;
     public List<ItemSlot> inventorySlots;
+    public Character character;
     private int _inventoryMaxCapacity = 24;
     private void Awake()
     {
@@ -19,26 +24,50 @@ public class Inventory : ScriptableObject
 
     }
 
+    public void PutItemToInventory(Item item)
+    {
+        
+        for (int i = 0; i < _backpack.itemSlots; i++)
+        {
+            ItemSlot currentSlot = inventorySlots[i];
+            if (currentSlot.itemInSlot == null)
+            {
+                currentSlot.itemInSlot = item;
+                currentSlot.slotNo = i;
+                return;
+            }
+        }
+        DropItem(item);
+
+    }
+
+    public void DropItem(Item item)
+    {
+        item.SpawnItem(character.transform.position);
+    }
+
+    public void DropItem(ItemSlot slot)
+    {
+        if (slot.itemInSlot == null) return;
+        DropItem(slot.itemInSlot);
+        slot.itemInSlot = null;
+    }
+
     private Backpack _backpack;
     private Backpack _lastBackpack;
+
     public void UpdateInventory()
     {
         _backpack = (Backpack)backpackSlot.itemInSlot;
-        if (_backpack == _lastBackpack) return;
         int lastSlots = _lastBackpack == null ? 0 : _lastBackpack.itemSlots;
         int currentSlots = _backpack == null ? 0 : _backpack.itemSlots;
 
 
         int slotsDiffrence = currentSlots - lastSlots;
-        Debug.Log($"Changing slot numbers from {lastSlots} to {_backpack.itemSlots}");
 
-        if (slotsDiffrence < 0)
+        for (int i = 0; i < inventorySlots.Count; i++)
         {
-            for (int i = lastSlots - 1; i >= currentSlots; i--)
-            {
-            Debug.Log($"Dropping slot number {i}");
-
-            }
+            inventorySlots[i].UpdateSlot();
         }
 
         _lastBackpack = _backpack;
@@ -48,10 +77,8 @@ public class Inventory : ScriptableObject
     {
         Inventory inventory = ScriptableObject.CreateInstance<Inventory>();
         inventory.backpackSlot = character.backpackSlot;
+        inventory.character = character;
         return inventory;
     }
-
-
-
 }
 

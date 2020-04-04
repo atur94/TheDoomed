@@ -3,9 +3,11 @@ using System;
 using TMPro;
 using UnityEditor.U2D;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ItemSlot : ScriptableObject
+public partial class ItemSlot : ScriptableObject
 {
     [SerializeField]
     public Item itemInSlot;
@@ -14,19 +16,59 @@ public class ItemSlot : ScriptableObject
 
     public int? slotNo;
 
-    public GameObject itemSlotPrefab;
+    public GameObject itemSlotInstance
+    {
+        get => _itemSlotInstance;
+        set
+        {
+            _itemSlotInstance = value;
+            if (isMoving) return;
+            if (_itemSlotInstance != null)
+            {
+                SlotEventsConfiguration();
+            }
+        }
+    }
 
-    public Image itemSlotImage;
+    private PlayerUIController _uiController;
 
-    public Sprite spriteSlotLocked;
-    public Sprite spriteSlotUnlocked;
-    public Sprite spriteSlotUndefined;
+    public void Awake()
+    {
+        _uiController = FindObjectOfType<PlayerUIController>();
+    }
+
+    private Image _itemSlotImage;
+    public Image itemSlotImage
+    {
+        get
+        {
+            if (_itemSlotImage == null && itemSlotInstance != null)
+            {
+                Image[] images = itemSlotInstance.GetComponentsInChildren<Image>();
+                foreach (var image in images)
+                {
+                    if (image.tag.Equals("ItemSlotInside"))
+                    {
+                        _itemSlotImage = image;
+                    }
+                }
+            }
+
+            return _itemSlotImage;
+        }
+    }
+
+    private Sprite SpriteSlotLocked => _uiController.spriteSlotLocked;
+    private Sprite SpriteSlotUnlocked => _uiController.spriteSlotUnlocked;
+    private Sprite SpriteSlotUndefined => _uiController.spriteSlotUndefined;
 
     public Type itemTypeRestriction;
 
     public bool isMoving;
-
+    public bool isSelected;
     public bool isHovering;
+
+    public bool isLocked = false;
         
     public void PlaceItem(Item item)
     {
@@ -51,51 +93,84 @@ public class ItemSlot : ScriptableObject
     }
 
     public Item LastItem;
+    private GameObject _itemSlotInstance;
 
-    public void UpdateSlotIcon()
+    public void DropItem()
+    {
+        if (isLocked && itemInSlot != null)
+        {
+            itemInSlot.SpawnItem(character.transform.position);
+            itemInSlot = null;
+        }
+    }
+
+    private void SetItemSlotVisibility(bool locked = false)
+    {
+        Sprite sprite;
+        float alphaWhileSelected = isSelected ? 0.5f : 1f;
+        if(!locked)
+        {
+            if (itemInSlot == null)
+            {
+                sprite = null;
+                itemSlotImage.color = new Color(1, 1, 1, 0);
+            }
+            else if (itemInSlot.itemSprite != null)
+            {
+                sprite = itemInSlot.itemSprite;
+                itemSlotImage.color = new Color(1, 1, 1, alphaWhileSelected);
+
+            }
+            else
+            {
+                sprite = SpriteSlotUndefined;
+                itemSlotImage.color = new Color(1, 1, 1, alphaWhileSelected);
+
+            }
+        }
+        else
+        {
+            sprite = SpriteSlotLocked;
+            itemSlotImage.color = new Color(1, 1, 1, alphaWhileSelected);
+        }
+
+        itemSlotImage.sprite = sprite;
+    }
+
+
+    public void UpdateSlot()
     {
         Backpack backpack = (Backpack)character.backpackSlot.itemInSlot;
 
         int itemSlots = backpack == null ? 0 : backpack.itemSlots;
 
+        if (itemInSlot != null) itemInSlot.CurrentItemSlot = this;
+
         if (slotNo.HasValue)
         {
             if (slotNo.Value < itemSlots)
             {
-                itemSlotImage.color = new Color(1,1,1,0);
+                isLocked = false;
+                SetItemSlotVisibility();
             }
             else
             {
-                itemSlotImage.sprite = spriteSlotLocked;
-                itemSlotImage.color = new Color(1,1,1,1);
+                isLocked = true;
+                SetItemSlotVisibility(true);
             }
         }
         else
         {
-            if (itemInSlot == null)
-            {
-                itemSlotImage.color = new Color(1,1,1,0);
-            }
-            else
-            {
-                if (itemInSlot.itemSprite == null)
-                {
-                    itemSlotImage.color = new Color(1, 1, 1, 1);
-
-                    itemSlotImage.sprite = spriteSlotUndefined;
-                }
-                else
-                {
-                    itemSlotImage.color = new Color(1, 1, 1, 1);
-
-                    itemSlotImage.sprite = itemInSlot.itemSprite;
-                }
-            }
+            isLocked = false;
+            SetItemSlotVisibility();
         }
-
-
-
+        DropItem();
         LastItem = itemInSlot;
+    }
+
+    public bool CanBePlaced(ItemSlot sourceItemSlot)
+    {
+        return CanBePlaced(sourceItemSlot.itemInSlot);
     }
 
     public bool CanBePlaced(Item item)
@@ -132,14 +207,12 @@ public class ItemSlot : ScriptableObject
         return false;
     }
 
-    public void Update()
+    public ItemSlot Copy()
     {
-
-    }
-
-    public void DropItem()
-    {
-        Debug.Log("Item droped");
+        ItemSlot copy = ScriptableObject.CreateInstance<ItemSlot>();
+        copy.itemInSlot = itemInSlot;
+        copy.itemInSlot.itemSprite = itemInSlot.itemSprite; 
+        return copy;
     }
 
     public static ItemSlot CreateSlot(Character character, Type itemRestriction = null)
@@ -150,43 +223,23 @@ public class ItemSlot : ScriptableObject
         return slot;
     }
 
-    public static ItemSlot CreateSlot(Character character, int slotNo,GameObject slotInstance, Sprite spriteLocked,
-        Sprite spriteUnlocked, Sprite spriteUndefined, Type itemRestriction = null)
+    public static ItemSlot CreateSlot(Character character, int slotNo,GameObject slotInstance, Type itemRestriction = null)
     {
         ItemSlot itemSlot = ScriptableObject.CreateInstance<ItemSlot>();
         itemSlot.slotNo = slotNo;
         itemSlot.character = character;
-        itemSlot.itemSlotPrefab = slotInstance;
-        itemSlot.spriteSlotLocked = spriteLocked;
-        itemSlot.spriteSlotUnlocked = spriteUnlocked;
-        itemSlot.spriteSlotUndefined = spriteUndefined;
+        itemSlot.itemSlotInstance = slotInstance;
         itemSlot.itemTypeRestriction = itemRestriction;
-        Image[] images = slotInstance.GetComponentsInChildren<Image>();
-        foreach (var image in images)
-        {
-            if (image.tag.Equals("ItemSlotInside"))
-            {
-                itemSlot.itemSlotImage = image;
-            }
-        }
         return itemSlot;
     }
 
-    public static void ConfigureEquipmentSlot(ItemSlot itemSlot, GameObject slotInstance, Sprite spriteLocked,
-        Sprite spriteUnlocked, Sprite spriteUndefined)
+    public static void ConfigureEquipmentSlot(ItemSlot itemSlot, GameObject slotInstance)
     {
-        itemSlot.itemSlotPrefab = slotInstance;
-        itemSlot.spriteSlotLocked = spriteLocked;
-        itemSlot.spriteSlotUnlocked = spriteUnlocked;
-        itemSlot.spriteSlotUndefined = spriteUndefined;
-        Image[] images = slotInstance.GetComponentsInChildren<Image>();
-        foreach (var image in images)
-        {
-            if (image.tag.Equals("ItemSlotInside"))
-            {
-                itemSlot.itemSlotImage = image;
-            }
-        }
-
+        itemSlot.itemSlotInstance = slotInstance;
     }
+
+    public static void OnDragInit(ItemSlot itemSlot, Vector3 position)
+    {
+    }
+
 }

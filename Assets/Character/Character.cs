@@ -4,7 +4,12 @@ using UnityEditor;
 using UnityEngine;
 
 
-public abstract class Character : CharacterBase
+public interface IDamagable
+{
+    void DealDamage(Damage damage);
+}
+
+public abstract partial class Character : CharacterBase, IDamagable
 {
     public abstract KeyValuePair<int, string> group { get; }
 
@@ -17,9 +22,18 @@ public abstract class Character : CharacterBase
     public float[] experienceToLevelUp;
 
     public List<ItemSlot> itemSlots;
-    public ItemSlot backpackSlot;
 
+    public ItemSlot backpackSlot;
     public ItemSlot weaponSlot;
+    public ItemSlot chestSlot;
+    public ItemSlot bootsSlot;
+    public ItemSlot legsSlot;
+    public ItemSlot ringSlot;
+    public ItemSlot necklaceSlot;
+    public ItemSlot orbSlot;
+    public ItemSlot headSlot;
+
+
 
     public List<Status> statuses;
     private float _currentHealth;
@@ -42,7 +56,6 @@ public abstract class Character : CharacterBase
         LateInitialization();
     }
 
-
     private void InitializeInventory()
     {
         inventory = Inventory.CreateInventory(this);
@@ -51,14 +64,29 @@ public abstract class Character : CharacterBase
     private void InitializeSlots()
     {
         weaponSlot = ItemSlot.CreateSlot(this, typeof(Weapon));
+        chestSlot = ItemSlot.CreateSlot(this, typeof(Chest));
+        bootsSlot = ItemSlot.CreateSlot(this, typeof(Boots));
+        headSlot = ItemSlot.CreateSlot(this, typeof(Head));
+        legsSlot = ItemSlot.CreateSlot(this, typeof(Legs));
+        necklaceSlot = ItemSlot.CreateSlot(this, typeof(Necklace));
+        ringSlot = ItemSlot.CreateSlot(this, typeof(Ring));
+        orbSlot = ItemSlot.CreateSlot(this, typeof(Orb));
+        backpackSlot = ItemSlot.CreateSlot(this, typeof(Backpack));
+
 
         weaponSlot.PlaceItem(ScriptableObject.CreateInstance<Weapon>());
-        backpackSlot = ItemSlot.CreateSlot(this, typeof(Backpack));
         Backpack backpackDefault = ScriptableObject.CreateInstance<Backpack>();
         backpackDefault.itemSlots = 5;
         backpackSlot.PlaceItem(backpackDefault);
         itemSlots.Add(backpackSlot);
         itemSlots.Add(weaponSlot);
+        itemSlots.Add(chestSlot);
+        itemSlots.Add(bootsSlot);
+        itemSlots.Add(headSlot);
+        itemSlots.Add(legsSlot);
+        itemSlots.Add(necklaceSlot);
+        itemSlots.Add(ringSlot);
+        itemSlots.Add(orbSlot);
     }
 
     public void Awake()

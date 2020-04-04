@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f28bd0a8047481abe9cf67b6680f780, type: 3}
   m_Name: TestBackpack2
   m_EditorClassIdentifier: 
-  id: 0
-  name: 
+  id: 5
+  name: Small backpack
   StatsEffects: []
-  itemType: 0
+  itemType: 10
   itemModel: {fileID: 0}
-  itemSprite: {fileID: 0}
+  itemSprite: {fileID: 21300000, guid: 6b76a3b15261125418826a357d32131b, type: 3}
   category: Equipment
   requiredLevel: 0
-  itemSlots: 0
+  itemSlots: 10

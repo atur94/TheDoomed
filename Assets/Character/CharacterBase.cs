@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public abstract partial class CharacterBase : MonoBehaviour
@@ -47,6 +49,7 @@ public class CommonAttribute
     [HideInInspector]
     public float PerLevel = 0f;
 
+    private object statLock = new object();
     public float FlatBonuses
     {
         get
@@ -57,13 +60,17 @@ public class CommonAttribute
                 Base item = Character.itemSlots[i].itemInSlot;
                 if (item != null)
                 {
-                    for (int j = 0; j < item.StatsEffects.Count; j++)
+                    Parallel.For(0, item.StatsEffects.Count, j =>
                     {
                         AttributeSet attribute = item.StatsEffects[j];
                         if (attribute.AttributeType == AttributeType)
-                            sum += attribute.FlatBonus;
-                    }
-
+                        {
+                            lock (statLock)
+                            {
+                                sum += attribute.FlatBonus;
+                            }
+                        }
+                    });
                 }
             }
 
@@ -81,12 +88,17 @@ public class CommonAttribute
                 Base item = Character.itemSlots[i].itemInSlot;
                 if (item != null)
                 {
-                    for (int j = 0; j < item.StatsEffects.Count; j++)
+                    Parallel.For(0, item.StatsEffects.Count, j =>
                     {
                         AttributeSet attribute = item.StatsEffects[j];
-                        if(attribute.AttributeType == AttributeType)
-                            sum += attribute.PercentBonus;
-                    }
+                        if (attribute.AttributeType == AttributeType)
+                        {
+                            lock (statLock)
+                            {
+                                sum += attribute.PercentBonus;
+                            }
+                        }
+                    });
 
                 }
             }

@@ -544,7 +544,7 @@ GameObject:
   - component: {fileID: 3301891628620789881}
   m_Layer: 8
   m_Name: Black
-  m_TagString: HealthBar
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -911,7 +911,7 @@ GameObject:
   - component: {fileID: 3301891629210806666}
   m_Layer: 8
   m_Name: Black
-  m_TagString: HealthBar
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
