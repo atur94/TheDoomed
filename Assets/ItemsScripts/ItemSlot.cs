@@ -192,6 +192,7 @@ public partial class ItemSlot : ScriptableObject
         return CanBePlaced(sourceItemSlot.itemInSlot);
     }
 
+
     public bool CanBePlaced(Item item)
     {
         if (itemInSlot == null)

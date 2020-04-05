@@ -18,6 +18,16 @@ public abstract class Item : Base
     private void Awake()
     {
         Initialize();
+        StatsEffects.Sort(Comparison);
+    }
+
+
+
+    private int Comparison(AttributeSet x, AttributeSet y)
+    {
+        if (x.order == y.order) return 0;
+        if (x.order < y.order) return -1;
+        return 1;
     }
 
     public void SpawnItem(Vector3 location)

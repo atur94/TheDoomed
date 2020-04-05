@@ -8,9 +8,13 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
     public GameObject UI;
     public RectTransform Info;
 
+    public GameObject displayAttributesPrefab;
+
+
     public Sprite spriteSlotLocked;
     public Sprite spriteSlotUnlocked;
     public Sprite spriteSlotUndefined;
+
 
     public GameObject backpackSlotUI;
     public GameObject weaponSlotUI;
@@ -32,6 +36,7 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
     private ItemSlot _selectedItemSlot;
     private ItemSlot _sourceItemSlot;
     private ItemSlot _itemSlotOnHover;
+    private ItemDisplayControl _displayControl;
 
     public Transform moveLayerParent;
 
@@ -91,6 +96,11 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
             {
                 _selectedItemSlot.UpdateSlot();
             }
+
+            if (_displayControl != null)
+            {
+                _displayControl.displayInstance.GetComponent<RectTransform>().position = Input.mousePosition;
+            }
         }
 
         _diff = Input.mousePosition - _lastCursorsPosition;
@@ -147,12 +157,22 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
                 DestroyFloatingSlot(_selectedItemSlot);
                 break;
             case EventTriggerType.PointerEnter:
+                if(_displayControl != null) 
+                    _displayControl.Destroy();
+                _displayControl = null;
                 if (slot.itemInSlot != null)
                 {
                     _itemSlotOnHover = slot;
+                    _displayControl = ItemDisplayControl.CreateItemDisplayControl(slot, displayAttributesPrefab, moveLayerParent);
+                    _displayControl.Build();
                 }
                 break;
             case EventTriggerType.PointerExit:
+                if(_displayControl != null)
+                {
+                    _displayControl.Destroy();
+                    _displayControl = null;
+                }
                 _itemSlotOnHover = null;
                 break;
         }
@@ -208,6 +228,12 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
             _selectedItemSlot = null;
             _sourceItemSlot = null;
             Destroy(slot.itemSlotInstance.gameObject);
+        }
+
+        if (_displayControl != null)
+        {
+            _displayControl.Destroy();
+            _displayControl = null;
         }
     }
 

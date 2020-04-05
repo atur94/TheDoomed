@@ -21,12 +21,14 @@ public partial class ItemSlot
         onDragBegin.callback.AddListener(OnDragBegin);
         onDragEnd.callback.AddListener(OnDragEnd);
         onMouseButtonRelease.callback.AddListener(OnMouseRelease);
-        onPointerEnter.callback.AddListener(OnMouseRelease);
-        onPointerExit.callback.AddListener(OnMouseRelease);
+        onPointerEnter.callback.AddListener(OnMouseEnter);
+        onPointerExit.callback.AddListener(OnMouseExit);
 
         ent.triggers.Add(onDragBegin);
         ent.triggers.Add(onDragEnd);
         ent.triggers.Add(onMouseButtonRelease);
+        ent.triggers.Add(onPointerEnter);
+        ent.triggers.Add(onPointerExit);
     }
 
     private void OnMouseEnter(BaseEventData arg0)

@@ -210,21 +210,21 @@ public abstract class Base : ScriptableObject, IItemAttributes
 [Serializable]
 public class AttributeSet
 {
-    public AttributeSet(string name, AttributeType attributeType,float flatBonus, float percentBonus)
+    public AttributeSet(string name, AttributeType attributeType,float flatBonus, float percentBonus, string percentBonusFormat = "{0:P0}")
     {
         AttributeType = attributeType;
         FlatBonus = flatBonus;
         PercentBonus = percentBonus;
         Name = name;
+        PecentBonusFormat = percentBonusFormat;
     }
 
-    public string FlatBonusToString => $"{Name}: {FlatBonus}";
-    public string PercentBonusToString => $"{Name}: +{(int)(PercentBonus * 100)}%";
-
+    public string PecentBonusFormat { get; set; }
     public AttributeType AttributeType;
     public float FlatBonus;
     public float PercentBonus;
     public string Name;
+    public int order;
 }
 
 public struct ItemAttributeInit
