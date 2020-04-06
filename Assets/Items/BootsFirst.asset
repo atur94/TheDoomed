@@ -15,14 +15,16 @@ MonoBehaviour:
   id: 156
   name: Swiftness boots
   StatsEffects:
-  - AttributeType: 14
+  - isMainAttribute: 0
+    attributeType: 0
     FlatBonus: 50
     PercentBonus: 0
-    Name: 
-  - AttributeType: 20
+    order: 0
+  - isMainAttribute: 0
+    attributeType: 0
     FlatBonus: 0.5
     PercentBonus: 0
-    Name: 
+    order: 0
   itemType: 6
   itemModel: {fileID: 0}
   itemSprite: {fileID: 21300000, guid: 4882bb4344ce836489cac0a533c4f297, type: 3}

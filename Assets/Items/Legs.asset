@@ -14,7 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   name: Heaven's legs
-  StatsEffects: []
+  StatsEffects:
+  - isMainAttribute: 1
+    attributeType: 16
+    FlatBonus: 14
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 0
+    attributeType: 0
+    FlatBonus: 0
+    PercentBonus: 0.4
+    order: 0
   itemType: 5
   itemModel: {fileID: 0}
   itemSprite: {fileID: 21300000, guid: 911f4910621a90541a1d7e1237c9131c, type: 3}

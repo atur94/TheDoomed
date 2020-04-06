@@ -161,7 +161,7 @@ public partial class ItemSlot : ScriptableObject
     {
         Backpack backpack = (Backpack)character.backpackSlot.itemInSlot;
 
-        int itemSlots = backpack == null ? 0 : backpack.itemSlots;
+        int itemSlots = backpack == null ? 0 : (int)backpack.ItemSlots.FlatBonus;
 
         if (itemInSlot != null) itemInSlot.CurrentItemSlot = this;
 

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Globalization;
+using System.Threading;
 
 public class GameManager : MonoBehaviour
 {
@@ -13,5 +15,7 @@ public class GameManager : MonoBehaviour
         Physics.IgnoreLayerCollision(8,13);
         Physics.IgnoreLayerCollision(9,13);
         controllableCharacter = FindObjectOfType<Player>();
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
+        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
     }
 }

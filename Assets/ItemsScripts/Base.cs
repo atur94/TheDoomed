@@ -210,21 +210,114 @@ public abstract class Base : ScriptableObject, IItemAttributes
 [Serializable]
 public class AttributeSet
 {
-    public AttributeSet(string name, AttributeType attributeType,float flatBonus, float percentBonus, string percentBonusFormat = "{0:P0}")
+    public bool isMainAttribute = true;
+    public AttributeSet(AttributeType attributeType,float flatBonus, float percentBonus, string unit = "")
     {
-        AttributeType = attributeType;
+        this.attributeType = attributeType;
         FlatBonus = flatBonus;
         PercentBonus = percentBonus;
-        Name = name;
-        PecentBonusFormat = percentBonusFormat;
+        _name = AttributeTypeToName(attributeType);
+        this.unit = unit;
     }
 
-    public string PecentBonusFormat { get; set; }
-    public AttributeType AttributeType;
+    public string unit;
+
+    public string FlatBonusFormat
+    {
+        get
+        {
+            if (!isMainAttribute) _flatBonusFormat = "{0:+0.##;-0.##;#}";
+            else _flatBonusFormat = "{0:0.##;-0.##;#}";
+            return _flatBonusFormat;
+        }
+        set => _flatBonusFormat = value;
+    }
+
+    public string PercentBonusFormat
+    {
+        get
+        {
+            _percentBonusFormat = "{0:+0%;-0%;0}";
+            return _percentBonusFormat;
+        }
+        set => _percentBonusFormat = value;
+    }
+
+    public string FlatBonusAsString
+    {
+        get
+        {
+            var s = string.Format(FlatBonusFormat, FlatBonus);
+            if (!unit.Equals(""))
+                s = $"{s} {unit}";
+            return s;
+        }
+    }
+
+    public string PecentBonusAsString => string.Format(PercentBonusFormat, (PercentBonus));
+    public AttributeType attributeType;
     public float FlatBonus;
     public float PercentBonus;
-    public string Name;
+
+    public string Name
+    {
+        get
+        {
+            if (_name.Equals(""))
+            {
+                return AttributeTypeToName(attributeType);
+            }
+
+            return _name;
+        }
+        set { _name = value; }
+    }
+
     public int order;
+    private string _name;
+    private string _flatBonusFormat;
+    private string _percentBonusFormat;
+
+    public static string AttributeTypeToName(AttributeType attributeType)
+    {
+        switch (attributeType)
+        {
+            case AttributeType.Vitality:
+                return "Vitality";
+            case AttributeType.Strength:
+                return "Strength";
+            case AttributeType.Agility:
+                return "Agility";
+            case AttributeType.Intelligence:
+                return "Intelligence";
+            case AttributeType.PhysicalAttack:
+                return "Physical attack";
+            case AttributeType.MagicPower: return "Magic power";
+            case AttributeType.Health: return "Health";
+            case AttributeType.Mana: return "Mana";
+            case AttributeType.PhysicalDefense: return "Physical defense";
+            case AttributeType.MagicalDefense: return "Magical defense";
+            case AttributeType.CriticalChance: return "Critical chance";
+            case AttributeType.CriticalDamage: return "Critical damage";
+            case AttributeType.Evasion: return "Evasion";
+            case AttributeType.Accuracy: return "Accuracy";
+            case AttributeType.MovementSpeed: return "Movement speed";
+            case AttributeType.HealthRegen: return "Health regeneration";
+            case AttributeType.ManaRegen: return "Mana regeneration";
+            case AttributeType.FieldOfViewAngle: return "Field of view(angle)";
+            case AttributeType.FieldOfViewRangeLight: return "Field of view range(light)";
+            case AttributeType.FieldOfViewRangeDark: return "Field of view range(dark)";
+            case AttributeType.TurnRate: return "Turn rate";
+            case AttributeType.ChannelingTimeReduction: return "Channeling time";
+            case AttributeType.CastingTimeReduction: return "Casting time";
+            case AttributeType.CooldownTimeReduction: return "Cooldown time";
+            case AttributeType.AttackSpeed: return "Attack speed";
+            case AttributeType.AttackWeaponRange: return "Attack range";
+            case AttributeType.StorageCapacity: return "Storage capacity";
+        }
+
+        return "";
+    }
 }
 
 public struct ItemAttributeInit

@@ -163,7 +163,7 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
                 if (slot.itemInSlot != null)
                 {
                     _itemSlotOnHover = slot;
-                    _displayControl = ItemDisplayControl.CreateItemDisplayControl(slot, displayAttributesPrefab, moveLayerParent);
+                    _displayControl = ItemDisplayControl.CreateItemDisplayControl(slot, displayAttributesPrefab, moveLayerParent, character);
                     _displayControl.Build();
                 }
                 break;

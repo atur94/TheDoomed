@@ -19,8 +19,17 @@ public class Pickable : MonoBehaviour, IPickable
     private void Awake()
     {
         radius = 2f;
+
+    }
+
+
+    private void Start()
+    {
         var gm = FindObjectOfType<GameManager>();
         _character = gm.controllableCharacter;
+        var rb = gameObject.GetComponent<Rigidbody>();
+
+        if (rb == null) gameObject.AddComponent<Rigidbody>();
     }
 
     private void OnMouseDown()

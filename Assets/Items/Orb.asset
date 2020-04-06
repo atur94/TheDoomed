@@ -19,4 +19,4 @@ MonoBehaviour:
   itemModel: {fileID: 0}
   itemSprite: {fileID: 21300000, guid: 2e94d3d03d8416145acc2c6185d9f073, type: 3}
   category: Equipment
-  requiredLevel: 0
+  requiredLevel: 26

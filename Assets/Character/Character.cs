@@ -75,9 +75,8 @@ public abstract partial class Character : CharacterBase, IDamagable
 
 
         weaponSlot.PlaceItem(ScriptableObject.CreateInstance<Weapon>());
-        Backpack backpackDefault = ScriptableObject.CreateInstance<Backpack>();
-        backpackDefault.itemSlots = 5;
-        backpackSlot.PlaceItem(backpackDefault);
+        var backpack = ScriptableObject.CreateInstance<Backpack>();
+        backpackSlot.PlaceItem(backpack);
         itemSlots.Add(backpackSlot);
         itemSlots.Add(weaponSlot);
         itemSlots.Add(chestSlot);

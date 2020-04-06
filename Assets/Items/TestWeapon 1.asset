@@ -15,61 +15,48 @@ MonoBehaviour:
   id: 123
   name: Ostrze cieni
   StatsEffects:
-  - AttributeType: 24
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 14
+    FlatBonus: 401
+    PercentBonus: 0
+    order: -1
+  - isMainAttribute: 0
+    unit: 
+    attributeType: 0
     FlatBonus: 0
-    PercentBonus: 0.8
-    Name: Attack speed
+    PercentBonus: 0
     order: 0
-  - AttributeType: 4
-    FlatBonus: 60
-    PercentBonus: 0.1
-    Name: Attack damage
-    order: 4
-  - AttributeType: 25
-    FlatBonus: 30
-    PercentBonus: 0
-    Name: Attack range
-    order: 2
-  - AttributeType: 24
+  - isMainAttribute: 0
+    unit: 
+    attributeType: 0
     FlatBonus: 0
-    PercentBonus: 0.8
-    Name: Attack speed
-    order: 3
-  - AttributeType: 4
-    FlatBonus: 60
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 2
+    FlatBonus: 2
+    PercentBonus: 0.4
+    order: 0
+  - isMainAttribute: 1
+    unit: dmg
+    attributeType: 4
+    FlatBonus: 61
     PercentBonus: 0.1
-    Name: Attack damage
-    order: 4
-  - AttributeType: 25
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 25
     FlatBonus: 30
     PercentBonus: 0
-    Name: Attack range
-    order: 5
-  - AttributeType: 14
-    FlatBonus: 400
+    order: 0
+  - isMainAttribute: 1
+    unit: attack
+    attributeType: 24
+    FlatBonus: 0.9
     PercentBonus: 0
-    Name: Movement Speed
     order: 1
-  - AttributeType: 24
-    FlatBonus: 0
-    PercentBonus: 0.8
-    Name: Attack speed
-    order: 0
-  - AttributeType: 4
-    FlatBonus: 60
-    PercentBonus: 0.1
-    Name: Attack damage
-    order: 0
-  - AttributeType: 25
-    FlatBonus: 30
-    PercentBonus: 0
-    Name: Attack range
-    order: 0
-  - AttributeType: 14
-    FlatBonus: 400
-    PercentBonus: 0
-    Name: Movement Speed
-    order: 0
   itemType: 0
   itemModel: {fileID: 0}
   itemSprite: {fileID: 21300000, guid: 4133aa875b05ef34eb57ab3338e00b27, type: 3}

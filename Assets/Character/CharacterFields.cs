@@ -96,5 +96,6 @@ public enum AttributeType
   CastingTimeReduction,
   CooldownTimeReduction,
   AttackSpeed,
-  AttackWeaponRange
+  AttackWeaponRange,
+  StorageCapacity
 }

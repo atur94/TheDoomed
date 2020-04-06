@@ -63,7 +63,7 @@ public class CommonAttribute
                     Parallel.For(0, item.StatsEffects.Count, j =>
                     {
                         AttributeSet attribute = item.StatsEffects[j];
-                        if (attribute.AttributeType == AttributeType)
+                        if (attribute.attributeType == AttributeType)
                         {
                             lock (statLock)
                             {
@@ -91,7 +91,7 @@ public class CommonAttribute
                     Parallel.For(0, item.StatsEffects.Count, j =>
                     {
                         AttributeSet attribute = item.StatsEffects[j];
-                        if (attribute.AttributeType == AttributeType)
+                        if (attribute.attributeType == AttributeType)
                         {
                             lock (statLock)
                             {
