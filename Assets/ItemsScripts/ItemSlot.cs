@@ -216,7 +216,7 @@ public partial class ItemSlot : ScriptableObject
             {
                 if (itemSlot.itemTypeRestriction == equipment.GetType())
                 {
-                    if ((int)equipment.requiredLevel <= (int)itemSlot.character.Level)
+                    if ((int)equipment.requiredLevel <= (int)itemSlot.character.level)
                     {
                         return true;
                     }

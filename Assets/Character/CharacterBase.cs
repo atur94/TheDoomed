@@ -7,9 +7,23 @@ using UnityEngine;
 
 public abstract partial class CharacterBase : MonoBehaviour
 {
-    public float Level;
+    public int level;
     public int Id;
     protected int MaxLevel = 25;
+
+    public int PointsForDistribution
+    {
+        get
+        {
+            if (level < 2) return 0;
+            return ((level - 1) * 5) - pointsDistributed;
+            
+        }
+    }
+
+    public int pointsDistributed;
+
+
     public Attributes BaseAttributes;
 
 
@@ -32,7 +46,7 @@ public class CommonAttribute
     {
         protected get =>
             _base + StrengthCoef * Character.strength.Value + VitalityCoef * Character.vitality.Value +
-            AgilityCoef * Character.agility.Value + IntelligenceCoef * Character.intelligence.Value + PerLevel * Character.Level;
+            AgilityCoef * Character.agility.Value + IntelligenceCoef * Character.intelligence.Value + PerLevel * Character.level;
         set => _base = value;
     }
 
@@ -140,7 +154,7 @@ public class MainAttribute : CommonAttribute
 
     public override float Base
     {
-        protected get => _base + Added + PerLevel * Character.Level;
+        protected get => _base + Added + PerLevel * Character.level;
         set => _base = value;
     }
 
@@ -176,7 +190,7 @@ public class AttackSpeedAttribute : CommonAttribute
         {
             return _base * (1 + StrengthCoef * Character.strength.Value + VitalityCoef * Character.vitality.Value +
                             AgilityCoef * Character.agility.Value + IntelligenceCoef * Character.intelligence.Value +
-                            PerLevel * Character.Level);
+                            PerLevel * Character.level);
         }
         set { _base = value; }
     }

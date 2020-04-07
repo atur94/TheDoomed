@@ -40,7 +40,7 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
 
     public Transform moveLayerParent;
 
-
+    private UIAttributeBinder _uiAttributeBinder;
 
     void Start()
     {
@@ -49,7 +49,38 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
         onMouseUp.eventID = EventTriggerType.Drop;
         onMouseUp.callback.AddListener(DropItem);
         ent.triggers.Add(onMouseUp);
+        _uiAttributeBinder = UI.GetComponentInChildren<UIAttributeBinder>(); 
+        _uiAttributeBinder.confirmButton.onClick.AddListener(TestE);
+        _uiAttributeBinder.addVitality.onClick.AddListener(() =>
+        {
+            character.vitality.Added += 1;
+            character.pointsDistributed += 1;
+
+        });
+        _uiAttributeBinder.addStrength.onClick.AddListener(() =>
+        {
+            character.strength.Added += 1;
+            character.pointsDistributed += 1;
+
+        });
+        _uiAttributeBinder.addAgility.onClick.AddListener(() =>
+        {
+            character.agility.Added += 1;
+            character.pointsDistributed += 1;
+        });
+        _uiAttributeBinder.addIntelligence.onClick.AddListener(() =>
+        {
+            character.intelligence.Added += 1;
+            character.pointsDistributed += 1;
+
+        });
     }
+
+    private void TestE()
+    {
+        Debug.Log("DSADASDASDDSDS");
+    }
+
     public void DropItem(BaseEventData arg0)
     {
         if (_selectedItemSlot != null && _sourceItemSlot != null)
@@ -58,16 +89,17 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
         }
     }
 
-
-    public void DropItem()
+    void UpdateAttributesUI()
     {
-        Debug.Log("Started");
-        if (_selectedItemSlot != null && _sourceItemSlot != null)
-        {
-            character.inventory.DropItem(_sourceItemSlot);
-        }
-    }
+        if (_uiAttributeBinder == null && !UI.activeSelf) return;
 
+        _uiAttributeBinder.distributionPoints.SetText(character.PointsForDistribution.ToString());
+        _uiAttributeBinder.level.SetText(character.level.ToString());
+        _uiAttributeBinder.vitality.SetText(character.vitality.Value.ToString());
+        _uiAttributeBinder.strength.SetText(character.strength.Value.ToString());
+        _uiAttributeBinder.agility.SetText(character.agility.Value.ToString());
+        _uiAttributeBinder.intelligence.SetText(character.intelligence.Value.ToString());
+    }
 
     // Update is called once per frame
     void Update()
@@ -102,9 +134,13 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
                 _displayControl.displayInstance.GetComponent<RectTransform>().position = Input.mousePosition;
             }
         }
-
         _diff = Input.mousePosition - _lastCursorsPosition;
         _lastCursorsPosition = Input.mousePosition;
+    }
+
+    private void LateUpdate()
+    {
+        UpdateAttributesUI();
     }
 
     private Vector3 _diff;

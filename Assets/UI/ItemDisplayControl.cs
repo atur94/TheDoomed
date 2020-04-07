@@ -41,7 +41,7 @@ public class ItemDisplayControl : ScriptableObject
             if (item is Equipment equipment)
             {
                 binder.requiredLevel.SetText(equipment.requiredLevel.ToString());
-                if (character.Level < equipment.requiredLevel)
+                if (character.level < equipment.requiredLevel)
                 {
                     binder.requiredLevel.color = Color.red;
                 }

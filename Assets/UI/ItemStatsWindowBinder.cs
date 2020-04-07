@@ -1,12 +1,9 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 using TMPro;
-using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class ItemStatsWindowBinder : Image
+
+public class ItemStatsWindowBinder : MonoBehaviour
 {
     public TextMeshProUGUI itemName;
     public GameObject typeParent;
