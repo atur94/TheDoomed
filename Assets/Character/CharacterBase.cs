@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,20 +9,44 @@ using UnityEngine;
 public abstract partial class CharacterBase : MonoBehaviour
 {
     public int level;
-    public int Id;
-    protected int MaxLevel = 25;
+    private int? _id;
 
+    private static int _idCounter;
+    private static int IdCounter
+    {
+        get
+        {
+            _idCounter++;
+            return _idCounter;
+        }
+    }
+
+    public int Id
+    {
+        get
+        {
+            if (_id == null)
+            {
+                _id = IdCounter;
+            }
+
+            return _id.Value;
+        }
+        set => _id = value;
+    }
+
+    protected int MaxLevel = 25;
     public int PointsForDistribution
     {
         get
         {
             if (level < 2) return 0;
-            return ((level - 1) * 5) - pointsDistributed;
+            return ((level - 1) * 5) - _pointsDistributed;
             
         }
     }
 
-    public int pointsDistributed;
+    private int _pointsDistributed;
 
 
     public Attributes BaseAttributes;
@@ -31,9 +56,37 @@ public abstract partial class CharacterBase : MonoBehaviour
 
     public float currentMana;
 
+    protected Rigidbody rb;
     protected void Initialize(Character character)
     {
+        _pointsDistributed = 0;
+        rb = GetComponent<Rigidbody>();
+        Id = IdCounter;
         InitializeList(character);
+    }
+
+    public int AddStatPoint(AttributeType attributeType)
+    {
+        if (PointsForDistribution <= 0) return 0;
+
+
+        switch (attributeType)
+        {
+            case AttributeType.Vitality:
+                vitality.Added++;
+                break;
+            case AttributeType.Strength:
+                strength.Added++;
+                break;
+            case AttributeType.Agility:
+                agility.Added++;
+                break;
+            case AttributeType.Intelligence:
+                intelligence.Added++;
+                break;
+        }
+
+        return _pointsDistributed++;
     }
 }
 
@@ -150,6 +203,7 @@ public class CommonAttribute
 
 public class MainAttribute : CommonAttribute
 {
+    
     public float Added;
 
     public override float Base

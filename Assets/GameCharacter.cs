@@ -31,7 +31,6 @@ public class GameCharacter : GameCharacterBase
     public void Start()
     {
         statusBar = GetComponentInChildren<StatusBar>();
-        statusBar.SetHealthPointsPercentage(1f);
         characterController = GetComponent<CharacterController>();
         Statuses = new List<Status>();
 
@@ -51,7 +50,6 @@ public class GameCharacter : GameCharacterBase
 
 
         var projectileObject = Instantiate(projectileDefault, transform.position, Quaternion.identity);
-        Projectile.CreateProjectile(projectileObject, projectileType);
         timeBetweenAttacks = 1 / attackSpeedBase;
     }
 
@@ -62,7 +60,6 @@ public class GameCharacter : GameCharacterBase
         if (currentHealth > calculatedDamage)
         {
             currentHealth -= (int)calculatedDamage;
-            statusBar.SetHealthPointsPercentage(currentHealth/(float)maxHealthBase);
         }
         else
         {

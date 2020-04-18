@@ -23,4 +23,11 @@ public class UIAttributeBinder : MonoBehaviour
     public Button addAgility;
     public Button subIntelligence;
     public Button addIntelligence;
+
+    public TextMeshProUGUI physicalDamage;
+    public TextMeshProUGUI magicalDamage;
+    public TextMeshProUGUI physicalDefense;
+    public TextMeshProUGUI magicalDefense;
+    public TextMeshProUGUI attackRate;
+    public TextMeshProUGUI movementSpeed;
 }

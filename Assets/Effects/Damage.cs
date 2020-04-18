@@ -6,12 +6,12 @@ public class Damage
     public float PhysicalDamage { get; }
     public float MagicalDamage { get; }
 
-    private List<Status> Effects;
+    public List<Status> OnHitEffects;
 
-    public Damage(float physicalDamage, float magicalDamage, List<Status> effects = null)
+    public Damage(float physicalDamage, float magicalDamage, List<Status> onHitEffects = null)
     {
         PhysicalDamage = physicalDamage;
         MagicalDamage = magicalDamage;
-        Effects = effects;
+        this.OnHitEffects = onHitEffects;
     }
 }

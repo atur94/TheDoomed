@@ -26,7 +26,7 @@ partial class CharacterBase
     public TimeAttribute channelingTimeReduction;
     public TimeAttribute castingTimeReduction;
     public TimeAttribute cooldownTimeReduction;
-    public AttackSpeedAttribute attackSpeed;
+    public CommonAttribute attackSpeed;
     public CommonAttribute attackWeaponRange;
 
 
@@ -65,7 +65,7 @@ partial class CharacterBase
         castingTimeReduction = new TimeAttribute(BaseAttributes.castingTime, character, AttributeType.CastingTimeReduction);
         cooldownTimeReduction = new TimeAttribute(BaseAttributes.cooldownReduction, character, AttributeType.CooldownTimeReduction);
 
-        attackSpeed = new AttackSpeedAttribute(BaseAttributes.attackSpeed, character, AttributeType.AttackSpeed);
+        attackSpeed = new CommonAttribute(BaseAttributes.attackSpeed, character, AttributeType.AttackSpeed);
     }
 }
 

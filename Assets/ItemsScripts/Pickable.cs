@@ -6,27 +6,23 @@ public class Pickable : MonoBehaviour, IPickable
 {
     public Item _item;
     public float radius;
-    [SerializeField]
-    private Character _character;
+    private GameManager gm;
 
     public void Pick()
     {
-        _character.Collect(this);
+        gm.controllableCharacter.Collect(this);
         Destroy(gameObject);
         
     }
 
     private void Awake()
     {
-        radius = 2f;
-
+        radius = 3f;
     }
-
 
     private void Start()
     {
-        var gm = FindObjectOfType<GameManager>();
-        _character = gm.controllableCharacter;
+        gm = FindObjectOfType<GameManager>();
         var rb = gameObject.GetComponent<Rigidbody>();
 
         if (rb == null) gameObject.AddComponent<Rigidbody>();
@@ -34,7 +30,7 @@ public class Pickable : MonoBehaviour, IPickable
 
     private void OnMouseDown()
     {
-        float distance = Vector3.Distance(_character.transform.position, transform.position);
+            float distance = Vector3.Distance(gm.controllableCharacter.transform.position, transform.position);
         if (distance < 2)
         {
             Pick();

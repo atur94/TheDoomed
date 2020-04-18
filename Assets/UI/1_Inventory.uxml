@@ -1,5 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
-    <ui:VisualElement style="height: 642px;&#10;width: 577px;&#10;background-color: rgba(41, 48, 65, 255);&#10;align-items: auto;&#10;justify-content: flex-start;&#10;">
-        <Style src="1_Inventory.uss" />
-    </ui:VisualElement>
-</ui:UXML>

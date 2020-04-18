@@ -52,10 +52,28 @@ MonoBehaviour:
     PercentBonus: 0
     order: 0
   - isMainAttribute: 1
-    unit: attack
+    unit: 
+    attributeType: 4
+    FlatBonus: 60
+    PercentBonus: 0.1
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 25
+    FlatBonus: 30
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 1
+    unit: 
     attributeType: 24
     FlatBonus: 0.9
     PercentBonus: 0
+    order: 1
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 24
+    FlatBonus: 0
+    PercentBonus: 0.5
     order: 1
   itemType: 0
   itemModel: {fileID: 0}

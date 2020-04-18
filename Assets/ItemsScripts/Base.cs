@@ -211,13 +211,26 @@ public abstract class Base : ScriptableObject, IItemAttributes
 public class AttributeSet
 {
     public bool isMainAttribute = true;
-    public AttributeSet(AttributeType attributeType,float flatBonus, float percentBonus, string unit = "")
+    public AttributeSet(AttributeType attributeType,float flatBonus, float percentBonus)
     {
         this.attributeType = attributeType;
         FlatBonus = flatBonus;
         PercentBonus = percentBonus;
         _name = AttributeTypeToName(attributeType);
-        this.unit = unit;
+        SelectUnit();
+    }
+
+    void SelectUnit()
+    {
+        switch (attributeType)
+        {
+            case AttributeType.AttackSpeed:
+                unit = "atk/s";
+                break;
+            default:
+                unit = "";
+                break;
+        }
     }
 
     public string unit;
@@ -226,8 +239,8 @@ public class AttributeSet
     {
         get
         {
-            if (!isMainAttribute) _flatBonusFormat = "{0:+0.##;-0.##;#}";
-            else _flatBonusFormat = "{0:0.##;-0.##;#}";
+            if (!isMainAttribute) _flatBonusFormat = "{0:+0.##;-0.##;#} {1}";
+            else _flatBonusFormat = "{0:0.##;-0.##;#} {1}";
             return _flatBonusFormat;
         }
         set => _flatBonusFormat = value;
@@ -247,10 +260,7 @@ public class AttributeSet
     {
         get
         {
-            var s = string.Format(FlatBonusFormat, FlatBonus);
-            if (!unit.Equals(""))
-                s = $"{s} {unit}";
-            return s;
+            return string.Format(FlatBonusFormat, FlatBonus, unit);
         }
     }
 
@@ -311,8 +321,8 @@ public class AttributeSet
             case AttributeType.ChannelingTimeReduction: return "Channeling time";
             case AttributeType.CastingTimeReduction: return "Casting time";
             case AttributeType.CooldownTimeReduction: return "Cooldown time";
-            case AttributeType.AttackSpeed: return "Attack speed";
-            case AttributeType.AttackWeaponRange: return "Attack range";
+            case AttributeType.AttackSpeed: return "NormalAttack speed";
+            case AttributeType.AttackWeaponRange: return "NormalAttack range";
             case AttributeType.StorageCapacity: return "Storage capacity";
         }
 

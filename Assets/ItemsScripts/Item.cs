@@ -1,6 +1,4 @@
-﻿using System;
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 
 public interface IPickable
@@ -42,15 +40,23 @@ public abstract class Item : Base
         else
         {
             spawnedItem = Instantiate(itemModel, location, Quaternion.identity);
-        }
 
-        spawnedItem.layer = 13;
-        spawnedItem.AddComponent<Rigidbody>();
+        }
+        var rb = spawnedItem.AddComponent<Rigidbody>();
+        spawnedItem.gameObject.SetLayerRecursively(13);
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
+        
+        rb.velocity = Vector3.up *4;
+
+
+        rb.angularVelocity = Random.onUnitSphere * 4;
         Pickable pickable = spawnedItem.AddComponent<Pickable>();
         pickable._item = this;
 
 
     }
+
+
 }
 
 

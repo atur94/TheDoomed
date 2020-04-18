@@ -1,10 +1,6 @@
 ﻿ 
 using System;
-using TMPro;
-using UnityEditor.U2D;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public partial class ItemSlot : ScriptableObject
@@ -214,7 +210,7 @@ public partial class ItemSlot : ScriptableObject
         {
             if(item is Equipment equipment)
             {
-                if (itemSlot.itemTypeRestriction == equipment.GetType())
+                if (equipment.CanBePlacedInSlot(itemSlot))
                 {
                     if ((int)equipment.requiredLevel <= (int)itemSlot.character.level)
                     {

@@ -10,7 +10,7 @@ TagManager:
   - Inventory
   - PlayerUI
   - ItemSlotInside
-  - OmitLayer
+  - CooldownIndicator
   layers:
   - Default
   - TransparentFX
