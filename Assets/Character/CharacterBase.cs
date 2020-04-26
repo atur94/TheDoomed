@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using System.Threading;
-using System.Threading.Tasks;
+using JetBrains.Annotations;
+using Unity.Collections;
+using Unity.Jobs;
 using UnityEngine;
 
-public abstract partial class CharacterBase : MonoBehaviour
+public abstract partial class CharacterBase : MonoBehaviour, INotifyPropertyChanged
 {
     public int level;
     private int? _id;
@@ -52,11 +53,30 @@ public abstract partial class CharacterBase : MonoBehaviour
     public Attributes BaseAttributes;
 
 
-    public float currentHealth;
+    public float CurrentHealth
+    {
+        get => _currentHealth;
+        set
+        {
+            _currentHealth = value; 
+            OnPropertyChanged();
+        }
+    }
 
-    public float currentMana;
+    public float CurrentMana
+    {
+        get => _currentMana;
+        set
+        {
+            _currentMana = value;
+            OnPropertyChanged();
+        }
+    }
 
     protected Rigidbody rb;
+    private float _currentHealth;
+    private float _currentMana;
+
     protected void Initialize(Character character)
     {
         _pointsDistributed = 0;
@@ -88,13 +108,32 @@ public abstract partial class CharacterBase : MonoBehaviour
 
         return _pointsDistributed++;
     }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    [NotifyPropertyChangedInvocator]
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+
+    }
 }
 
-public class CommonAttribute
+public class CommonAttribute : INotifyPropertyChanged
 {
-    protected Character Character;
+    public static List<CommonAttribute> initList;
 
-    protected float _base;
+    public bool IsChanged
+    {
+        get => _isChanged;
+        set
+        {
+            _isChanged = value;
+            OnPropertyChanged();
+        }
+    }
+
+    protected Character Character;
+    protected float _base;  
     public virtual float Base
     {
         protected get =>
@@ -116,28 +155,24 @@ public class CommonAttribute
     [HideInInspector]
     public float PerLevel = 0f;
 
-    private object statLock = new object();
     public float FlatBonuses
     {
         get
         {
             float sum = 0;
-            for (int i = 0; i < Character.itemSlots.Count; i++)
-            {
-                Base item = Character.itemSlots[i].itemInSlot;
+            for(int i = 0; i < Character.itemSlots.Count; i++){
+                Base item = Character.itemSlots[i].ItemInSlot;
                 if (item != null)
                 {
-                    Parallel.For(0, item.StatsEffects.Count, j =>
+                    for (int j = 0; j < item.StatsEffects.Count; j++)
                     {
                         AttributeSet attribute = item.StatsEffects[j];
                         if (attribute.attributeType == AttributeType)
                         {
-                            lock (statLock)
-                            {
+
                                 sum += attribute.FlatBonus;
-                            }
                         }
-                    });
+                    }
                 }
             }
 
@@ -152,20 +187,17 @@ public class CommonAttribute
             float sum = 0;
             for (int i = 0; i < Character.itemSlots.Count; i++)
             {
-                Base item = Character.itemSlots[i].itemInSlot;
+                Base item = Character.itemSlots[i].ItemInSlot;
                 if (item != null)
                 {
-                    Parallel.For(0, item.StatsEffects.Count, j =>
+                    for (int j = 0; j < item.StatsEffects.Count; j++)
                     {
                         AttributeSet attribute = item.StatsEffects[j];
                         if (attribute.attributeType == AttributeType)
                         {
-                            lock (statLock)
-                            {
-                                sum += attribute.PercentBonus;
-                            }
+                            sum += attribute.PercentBonus;
                         }
-                    });
+                    };
 
                 }
             }
@@ -173,7 +205,18 @@ public class CommonAttribute
         }
     }
 
-    public virtual float Value => (Base + FlatBonuses) * (1 + PercentBonuses);
+    private float _value = 0f;
+    private bool _isChanged = true;
+
+    public virtual float Value
+    {
+        get
+        {
+            return _value;
+        }
+    }
+
+ 
 
 
     public CommonAttribute(float baseAttribute, float vitalityCoef, float strengthCoef, float agilityCoef,
@@ -186,6 +229,7 @@ public class CommonAttribute
         AgilityCoef = agilityCoef;
         IntelligenceCoef = intelligenceCoef;
         PerLevel = perLevel;
+
     }
 
     public CommonAttribute(InitialAttribute attribute, Character character, AttributeType attributeType)
@@ -198,6 +242,20 @@ public class CommonAttribute
         IntelligenceCoef = attribute.intelligenceCoef;
         PerLevel = attribute.perLevel;
         AttributeType = attributeType;
+        if (initList != null)
+        {
+            initList.Add(this);
+        }
+    }
+
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    [NotifyPropertyChangedInvocator]
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        _value = (Base + FlatBonuses) * (1 + PercentBonuses);
+        _isChanged = false;
     }
 }
 

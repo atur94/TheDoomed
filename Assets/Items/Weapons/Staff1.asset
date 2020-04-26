@@ -1,0 +1,42 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 18ae54359bc346b5b11398195e2952f2, type: 3}
+  m_Name: Staff1
+  m_EditorClassIdentifier: 
+  id: 0
+  name: Staff of wisdom
+  StatsEffects:
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 4
+    FlatBonus: 70
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 24
+    FlatBonus: 0.8
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 5
+    FlatBonus: 300
+    PercentBonus: 0
+    order: 0
+  itemType: 1
+  itemModel: {fileID: 2701449463483281039, guid: 502ed8068957ae745b0ba12e204734d5,
+    type: 3}
+  itemSprite: {fileID: 0}
+  category: Equipment
+  requiredLevel: 0
+  projectilePrefab: {fileID: 0}

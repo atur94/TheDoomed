@@ -1,20 +1,16 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
+﻿using UnityEngine;
 
 public class Damagable : MonoBehaviour, IDamagable
 {
     private float _health;
-    public Item _randomItem;
-    private Collider collider;
+    public Item randomItem;
 
     private void Awake()
     {
         _health = 100;
-//        _randomItem = ScriptableObject.CreateInstance<Weapon>();
     }
 
-    public void DealDamage(Damage damage)
+    public void TakeDamage(Damage damage)
     {
         var damageComponent = 20f + 0.2 * (damage.MagicalDamage + damage.PhysicalDamage);
 
@@ -24,10 +20,6 @@ public class Damagable : MonoBehaviour, IDamagable
         }
     }
 
-    private void Start()
-    {
-        collider = GetComponent<Collider>();
-    }
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.P))
@@ -44,7 +36,7 @@ public class Damagable : MonoBehaviour, IDamagable
 
     private void DropItem()
     {
-        if(_randomItem != null)
-            _randomItem.SpawnItem(collider.transform.position);
+        if(randomItem != null)
+            randomItem.SpawnItem(GetComponent<Collider>().transform.position);
     }
 }

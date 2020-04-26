@@ -4,13 +4,10 @@ using UnityEngine;
 
 public abstract class Weapon : Equipment
 {
-    public virtual AttackType AttackType => _attackType;
+    public virtual AttackType AttackType { get; }
 
     [SerializeField]
     private GameObject projectilePrefab;
-
-    public Transform weaponOffset;
-    private readonly AttackType _attackType;
 
     public GameObject ProjectileModel
     {
@@ -19,15 +16,23 @@ public abstract class Weapon : Equipment
             GameObject projectile;
             if (projectilePrefab == null)
             {
-                projectile = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                projectile = Resources.Load<GameObject>("DefaultProjectile");
+                projectile.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+
             }
             else
             {
                 projectile = Instantiate(projectilePrefab);
             }
-            projectile.transform.localScale = projectile.transform.localScale * 0.3f;
 
             return projectile;
         }
     }
+
+
+    public enum WeaponType
+    {
+        NoWeapon, Sword, Bow, Staff, Spear, Axe, GreatSword
+    }
+    //  0,          1,    2 ,   3   ,  3  ,  4 ,      5 
 }

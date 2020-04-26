@@ -9,10 +9,13 @@ public class WeaponSelector : MonoBehaviour
     public GameObject greatSword;
     public GameObject axe;
     public GameObject defaultModel;
-
+    public GameObject leftHand;
+    public GameObject rightHand;
+    private GameObject _modelInstance;
     public void SelectWeapon(Weapon weapon)
     {
         DisableAllWeapons();
+        if (_modelInstance != null) Destroy(_modelInstance);
 
         if (weapon == null) { 
             return;
@@ -23,11 +26,19 @@ public class WeaponSelector : MonoBehaviour
         {
             case Sword s:
                 if(sword != null)
+                {
                     sword.SetActive(true);
+                    SelectModel(sword, weapon);
+                    if (_modelInstance != null) _modelInstance.AddComponent<MeleeDamageScript>();
+                }
                 break;
             case Bow b:
                 if (bow != null)
+                {
                     bow.SetActive(true);
+                    SelectModel(bow, weapon);
+                    if(_modelInstance != null) _modelInstance.AddComponent<RangeDamageScript>();
+                }
                 break;
             case GreatSword gs:
                 if (greatSword != null)
@@ -38,14 +49,27 @@ public class WeaponSelector : MonoBehaviour
                     spear.SetActive(true);
                 break;
             case Staff ms:
-                if (magicStaff != null)
-                    magicStaff.SetActive(true);
+                magicStaff.SetActive(true);
+                SelectModel(magicStaff, weapon);
+                if (_modelInstance != null) _modelInstance.AddComponent<RangeDamageScript>();
                 break;
         }
     }
 
+    private void SelectModel(GameObject parent, Weapon weapon)
+    {
+        var model = weapon.itemModel ? weapon.itemModel : defaultModel;
+        _modelInstance = Instantiate(model, Vector3.zero, Quaternion.identity, parent.transform);
+        _modelInstance.transform.localPosition = model.transform.position;
+        _modelInstance.transform.localRotation = model.transform.rotation;
+        _modelInstance.GetComponentInChildren<MeshCollider>();
+        var coll = _modelInstance.GetComponentInChildren<MeshCollider>();
+        if(coll != null) Destroy(coll);
+    }
+
     public void DisableAllWeapons()
     {
+        if(_modelInstance != null) Destroy(_modelInstance.gameObject);
         if (sword != null) sword.SetActive(false);
         if (bow != null) bow.SetActive(false);
         if (magicStaff != null) magicStaff.SetActive(false);

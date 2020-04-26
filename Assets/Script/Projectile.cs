@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Serialization;
-using JetBrains.Annotations;
-using UnityEngine;
-using UnityEngine.Experimental.GlobalIllumination;
+﻿using UnityEngine;
+
 
 public class Projectile : ProjectileBase
 {
 
-    public static Projectile CreateProjectile(GameObject model, Damage damage, float speed, Vector3 spawnPos, Vector3 target, int parentId)
+    public static Projectile CreateProjectile(GameObject model, Damage damage, float speed, Vector3 spawnPos, Vector3 target, Character character)
     {
+        if (model == null)
+        {
+            model = Resources.Load<GameObject>("DefaultProjectile");
+            model.transform.localScale = new Vector3(0.2f,0.2f, 0.2f);
+
+        }
         Projectile projectileInstance = Instantiate(model, spawnPos, Quaternion.identity).AddComponent<Projectile>();
-        projectileInstance.damage = new Damage(damage.PhysicalDamage, damage.MagicalDamage, damage.OnHitEffects);
+        projectileInstance.damage = new Damage(damage.PhysicalDamage, damage.MagicalDamage, character, damage.OnHitEffects);
         projectileInstance.speed = speed;
         projectileInstance.gameObject.layer = 10;
-        projectileInstance.direction = Vector3.ProjectOnPlane(target - spawnPos, Vector3.up).normalized;
-        projectileInstance.parentId = parentId;
+        projectileInstance.direction = Vector3.ProjectOnPlane(target.normalized, Vector3.up);
+        projectileInstance.parentId = character.Id;
         return projectileInstance;
     }
 
@@ -23,6 +25,7 @@ public class Projectile : ProjectileBase
     {
         rb = gameObject.AddComponent<Rigidbody>();
         rb.velocity = direction.normalized * speed;
+        rb.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
         rb.useGravity = false;
         Collider collider = GetComponent<Collider>();
         collider.isTrigger = true;
@@ -35,7 +38,7 @@ public class Projectile : ProjectileBase
         {
             if (characterHit.Id != parentId)
             {
-                characterHit.DealDamage(damage);
+                characterHit.TakeDamage(damage);
                 Destroy(gameObject);
                 return;
             }

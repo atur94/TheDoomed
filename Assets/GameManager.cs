@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Cursor.SetCursor(CursorTexture, Vector3.zero,CursorMode.Auto);
+//        Cursor.SetCursor(CursorTexture, Vector3.zero,CursorMode.Auto);
         Physics.IgnoreLayerCollision(8,13);
         Physics.IgnoreLayerCollision(9,13);
         controllableCharacter = FindObjectOfType<Player>();

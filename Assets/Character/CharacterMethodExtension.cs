@@ -1,13 +1,15 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 public abstract partial class Character
 {
     public void Collect(Pickable pickable)
     {
         foreach (var eqSlot in itemSlots)
         {
-            if (eqSlot != null && eqSlot.itemInSlot == null && eqSlot.itemTypeRestriction == pickable._item.GetType() && eqSlot.CanBePlaced(pickable._item))
+            if (eqSlot != null && eqSlot.ItemInSlot == null && eqSlot.itemTypeRestriction == pickable._item.GetType() && eqSlot.CanBePlaced(pickable._item))
             {
                 eqSlot.PlaceItemInEquipment(pickable._item);
+
                 return;
             }
         }
@@ -20,11 +22,16 @@ public abstract partial class Character
     private float _strafeSpeed;
     private float _forwardSpeed;
     private float _speedNormalized;
+    private float _attackSpeedModifier;
+    private int _currentWeaponType;
     private static readonly int AngleDiffAnimator = Animator.StringToHash("AngleDiff");
     private static readonly int Speed = Animator.StringToHash("MovingSpeed");
     private static readonly int StrafeSpeedAnimator = Animator.StringToHash("StrafeSpeed");
     private static readonly int ForwardSpeedAnimator = Animator.StringToHash("ForwardSpeed");
     private static readonly int SpeedNormalizedAnimator = Animator.StringToHash("SpeedNormalized");
+    private static readonly int AttackingAnimator = Animator.StringToHash("Attacking");
+    private static readonly int AttackSpeedModifierAnimator = Animator.StringToHash("AttackSpeedModifier");
+    private static readonly int WeaponTypeAnimator = Animator.StringToHash("CurrentWeaponType");
 
     public float Angle
     {
@@ -42,7 +49,8 @@ public abstract partial class Character
         set
         {
             _angleDiff = value;
-            _animator.SetFloat(AngleDiffAnimator, _angleDiff);
+            if(_animator.runtimeAnimatorController!=null)
+                _animator.SetFloat(AngleDiffAnimator, _angleDiff);
 
         }
     }
@@ -53,7 +61,8 @@ public abstract partial class Character
         set
         {
             _strafeSpeed = value;
-            _animator.SetFloat(StrafeSpeedAnimator, _strafeSpeed);
+            if (_animator.runtimeAnimatorController != null)
+                _animator.SetFloat(StrafeSpeedAnimator, _strafeSpeed);
         }
     }
 
@@ -63,7 +72,8 @@ public abstract partial class Character
         set
         {
             _forwardSpeed = value;
-            _animator.SetFloat(ForwardSpeedAnimator, _forwardSpeed);
+            if (_animator.runtimeAnimatorController != null)
+                _animator.SetFloat(ForwardSpeedAnimator, _forwardSpeed);
         }
     }
 
@@ -73,7 +83,8 @@ public abstract partial class Character
         set
         {
             _movingSpeed = value;
-            _animator.SetFloat(Speed, _movingSpeed);
+            if (_animator.runtimeAnimatorController != null)
+                _animator.SetFloat(Speed, _movingSpeed);
         }
     }
     //150 wartość 1
@@ -83,7 +94,84 @@ public abstract partial class Character
         set
         {
             _speedNormalized = value / 150f;
-            _animator.SetFloat(SpeedNormalizedAnimator, _speedNormalized);
+            if (_animator.runtimeAnimatorController != null)
+                _animator.SetFloat(SpeedNormalizedAnimator, _speedNormalized);
         }
     }
+
+    public bool Attacking
+    {
+        get => _attacking;
+        set
+        {
+            _attacking = value;
+            if (_animator.runtimeAnimatorController != null)
+                _animator.SetBool(AttackingAnimator, _attacking);
+        }
+    }
+
+    public float AttackSpeedModifier
+    {
+        get => _attackSpeedModifier;
+        set
+        {
+            _attackSpeedModifier = value;
+            if (_animator.runtimeAnimatorController != null)
+                _animator.SetFloat(AttackSpeedModifierAnimator, _attackSpeedModifier);
+        }
+    }
+
+
+    //NoWeapon, Sword, Bow, Staff, Spear, Axe[0,1,...]
+    public int CurrentWeaponType
+    {
+        get => _currentWeaponType;
+        set
+        {
+            _currentWeaponType = value;
+            if (_animator.runtimeAnimatorController != null)
+                _animator.SetInteger(WeaponTypeAnimator, _currentWeaponType);
+        }
+    }
+
+    public void MeleeAttackStart()
+    {
+        MeleeDamageScript wds = GetComponentInChildren<MeleeDamageScript>();
+        if (weaponSlot.ItemInSlot == null || wds == null)
+        {
+            return;
+        }
+        wds.MeleeAttackStart();
+    }
+
+    public void MeleeAttackEnd()
+    {
+        MeleeDamageScript wds = GetComponentInChildren<MeleeDamageScript>();
+        if (weaponSlot.ItemInSlot == null || wds == null)
+        {
+            return;
+        }
+        wds.MeleeAttackEnd();
+    }
+
+    public void BowAttackShot()
+    {
+        RangeDamageScript bds = GetComponentInChildren<RangeDamageScript>();
+
+        if (weaponSlot.ItemInSlot is Bow bow)
+        {
+            bds.Attack();
+        }
+    }
+
+    public void StaffAttackCast()
+    {
+        RangeDamageScript bds = GetComponentInChildren<RangeDamageScript>();
+
+        if (weaponSlot.ItemInSlot is Staff staff)
+        {
+            bds.Attack();
+        }
+    }
+
 }

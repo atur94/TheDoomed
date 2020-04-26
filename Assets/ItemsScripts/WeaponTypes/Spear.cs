@@ -3,9 +3,7 @@
 [CreateAssetMenu(fileName = "New spear", menuName = "Inventory System Items/Weapon/Axe")]
 public class Spear : Weapon
 {
-    private AttackType _attackType = AttackType.Melee;
-
-    public override AttackType AttackType => _attackType;
+    public override AttackType AttackType { get; } = AttackType.Melee;
 
     public override void Initialize()
     {

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using Unity.Jobs;
 using UnityEngine;
 
 public abstract class Base : ScriptableObject, IItemAttributes
@@ -44,7 +45,6 @@ public abstract class Base : ScriptableObject, IItemAttributes
     public void AddToList(AttributeSet attribute)
     {
         if (StatsEffects.Contains(attribute)) return;
-
         StatsEffects.Add(attribute);
     }
 
@@ -204,7 +204,6 @@ public abstract class Base : ScriptableObject, IItemAttributes
         get { return _attackRange; }
         set { _attackRange = value; AddToList(value);}
     }
-
 }
 
 [Serializable]
@@ -273,7 +272,7 @@ public class AttributeSet
     {
         get
         {
-            if (_name.Equals(""))
+            if (String.IsNullOrWhiteSpace(_name))
             {
                 return AttributeTypeToName(attributeType);
             }

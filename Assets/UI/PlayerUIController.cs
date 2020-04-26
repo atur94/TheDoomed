@@ -222,7 +222,7 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
                 if(_displayControl != null) 
                     _displayControl.Destroy();
                 _displayControl = null;
-                if (slot.itemInSlot != null)
+                if (slot.ItemInSlot != null)
                 {
                     _itemSlotOnHover = slot;
                     _displayControl = ItemDisplayControl.CreateItemDisplayControl(slot, displayAttributesPrefab, moveLayerParent, character);
@@ -242,7 +242,7 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
 
     private void CreateFloatingSlot(ItemSlot sourceItemSlot)
     {
-        if (sourceItemSlot.isLocked || _selectedItemSlot != null || sourceItemSlot.itemInSlot == null) return;
+        if (sourceItemSlot.isLocked || _selectedItemSlot != null || sourceItemSlot.ItemInSlot == null) return;
 
         _selectedItemSlot = sourceItemSlot.Copy();
         _sourceItemSlot = sourceItemSlot;
@@ -269,13 +269,13 @@ public class PlayerUIController : MonoBehaviour, IDropHandler
             return;
         }
 
-        if (targetSlot.CanBePlaced(_sourceItemSlot.itemInSlot))
+        if (targetSlot.CanBePlaced(_sourceItemSlot.ItemInSlot))
         {
-            float hpPercentage = character.currentHealth / character.health.Value;
-            Item tempItem = targetSlot.itemInSlot;
-            targetSlot.PlaceItemInEquipment(_sourceItemSlot.itemInSlot);
-            _sourceItemSlot.itemInSlot = tempItem;
-            character.currentHealth = hpPercentage * character.health.Value;
+            float hpPercentage = character.CurrentHealth / character.health.Value;
+            Item tempItem = targetSlot.ItemInSlot;
+            targetSlot.PlaceItemInEquipment(_sourceItemSlot.ItemInSlot);
+            _sourceItemSlot.ItemInSlot = tempItem;
+            character.CurrentHealth = hpPercentage * character.health.Value;
         }
 
         DestroyFloatingSlot(_selectedItemSlot);

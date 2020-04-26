@@ -18,7 +18,7 @@ public class StatusBar : MonoBehaviour
 
     private void Start()
     {
-        trackingObject = gameObject.transform.parent.gameObject.transform.parent.gameObject;
+        trackingObject = GetComponentInParent<Character>().gameObject;
     }
 
     public void InitValues()

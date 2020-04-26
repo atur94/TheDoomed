@@ -35,8 +35,8 @@ public class Controller : MonoBehaviour
 //        if(_moveDirection.magnitude > 0.01f)
         
 
-        Collider[] enemies = CheckForEnemiesInRange();
-        Transform closestEnemy = GetClosestEnemyInRange(enemies);
+//        Collider[] enemies = CheckForEnemiesInRange();
+//        Transform closestEnemy = GetClosestEnemyInRange(enemies);
 
         RaycastHit hit;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -45,6 +45,14 @@ public class Controller : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             player.LookingDirection = Vector3.ProjectOnPlane(hit.point, Vector3.up);
+            if (Input.GetKey(KeyCode.Mouse0))
+            {
+                player.NormalAttack(player.LookingDirection);
+            }
+            else
+            {
+                player.Attacking = false;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.K))
@@ -55,7 +63,7 @@ public class Controller : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.L))
         {
 //            player.ApplyDisable(new Stun(player, 2f, 1));
-            player.DealDamage(new Damage(5f, 5f));
+            player.TakeDamage(new Damage(5f, 5f, null));
             player.BurnMana(5f);
         }
     }
@@ -65,7 +73,7 @@ public class Controller : MonoBehaviour
         var enemies = Physics.OverlapSphere(transform.position, 15f, enemiesLayerMask);
         foreach (var enemy in enemies)
         {
-            Debug.Log(enemy.transform.position);
+
 
         }
         return enemies;

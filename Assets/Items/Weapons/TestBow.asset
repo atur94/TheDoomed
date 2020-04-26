@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: TestBow
   m_EditorClassIdentifier: 
   id: 0
-  name: Test bow
+  name: 
   StatsEffects:
   - isMainAttribute: 1
     unit: 
     attributeType: 4
-    FlatBonus: 15
+    FlatBonus: 231
     PercentBonus: 0
     order: 0
   - isMainAttribute: 1
     unit: 
     attributeType: 24
-    FlatBonus: 1
+    FlatBonus: 3
     PercentBonus: 0
     order: 0
   - isMainAttribute: 0
@@ -33,6 +33,12 @@ MonoBehaviour:
     FlatBonus: 0
     PercentBonus: 0
     order: 0
+  - isMainAttribute: 0
+    unit: 
+    attributeType: 10
+    FlatBonus: 0
+    PercentBonus: 0.4
+    order: 0
   itemType: 0
   itemModel: {fileID: 1982176211844380202, guid: f315ede69bbccb049b23a865506717f2,
     type: 3}
@@ -40,4 +46,3 @@ MonoBehaviour:
   category: Equipment
   requiredLevel: 0
   projectilePrefab: {fileID: 0}
-  weaponOffset: {fileID: 0}

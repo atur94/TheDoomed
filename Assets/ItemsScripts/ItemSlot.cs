@@ -1,12 +1,23 @@
 ﻿ 
 using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
-public partial class ItemSlot : ScriptableObject
+public partial class ItemSlot : ScriptableObject, INotifyPropertyChanged
 {
-    [SerializeField]
-    public Item itemInSlot;
+    public Item _itemInSlot;
+    [SerializeField] public Item ItemInSlot
+    {
+        get => _itemInSlot;
+        set
+        {
+            _itemInSlot = value;
+            OnPropertyChanged();
+        }
+    }
 
     public Character character { private get; set; }
 
@@ -57,17 +68,17 @@ public partial class ItemSlot : ScriptableObject
 
     public void PlaceItemInEquipment(Item item)
     {
-        float hpPercentage = character.currentHealth / character.health.Value;
-        float mpPercentage = character.currentMana / character.mana.Value;
-        itemInSlot = item;
+        float hpPercentage = character.CurrentHealth / character.health.Value;
+        float mpPercentage = character.CurrentMana / character.mana.Value;
+        ItemInSlot = item;
 
         if (!slotNo.HasValue)
         {
-            if(Math.Abs(hpPercentage - character.currentHealth / character.health.Value) > 0.005f)
-                character.currentHealth = (hpPercentage > 0.04f ? hpPercentage - 0.04f : 0.04f) * character.health.Value;
+            if(Math.Abs(hpPercentage - character.CurrentHealth / character.health.Value) > 0.005f)
+                character.CurrentHealth = (hpPercentage > 0.04f ? hpPercentage - 0.04f : 0.04f) * character.health.Value;
 
-            if (Math.Abs(hpPercentage - character.currentMana / character.mana.Value) > 0.005f)
-                character.currentMana = (mpPercentage > 0.04f ? mpPercentage - 0.04f : 0.04f) * character.mana.Value;
+            if (Math.Abs(hpPercentage - character.CurrentMana / character.mana.Value) > 0.005f)
+                character.CurrentMana = (mpPercentage > 0.04f ? mpPercentage - 0.04f : 0.04f) * character.mana.Value;
         }
     }
 
@@ -85,11 +96,11 @@ public partial class ItemSlot : ScriptableObject
         
     public void PlaceItem(Item item)
     {
-        if (itemInSlot == null)
+        if (ItemInSlot == null)
         {
             if (CanBePlaced(item))
             {
-                itemInSlot = item;
+                ItemInSlot = item;
             }
         }
         else
@@ -97,10 +108,10 @@ public partial class ItemSlot : ScriptableObject
             if (CanBePlaced(item))
             {
                 var tempSlot = item.CurrentItemSlot;
-                var tempItem = itemInSlot;
+                var tempItem = ItemInSlot;
                 //Tutaj mogą być problemy z adresacją
-                itemInSlot = item;
-                tempSlot.itemInSlot = tempItem;
+                ItemInSlot = item;
+                tempSlot.ItemInSlot = tempItem;
             }
         }
 
@@ -112,10 +123,10 @@ public partial class ItemSlot : ScriptableObject
 
     public void DropItem()
     {
-        if (isLocked && itemInSlot != null)
+        if (isLocked && ItemInSlot != null)
         {
-            itemInSlot.SpawnItem(character.transform.position);
-            itemInSlot = null;
+            ItemInSlot.SpawnItem(character.transform.position);
+            ItemInSlot = null;
         }
     }
 
@@ -125,14 +136,14 @@ public partial class ItemSlot : ScriptableObject
         float alphaWhileSelected = isSelected ? 0.5f : 1f;
         if(!locked)
         {
-            if (itemInSlot == null)
+            if (ItemInSlot == null)
             {
                 sprite = null;
                 itemSlotImage.color = new Color(1, 1, 1, 0);
             }
-            else if (itemInSlot.itemSprite != null)
+            else if (ItemInSlot.itemSprite != null)
             {
-                sprite = itemInSlot.itemSprite;
+                sprite = ItemInSlot.itemSprite;
                 itemSlotImage.color = new Color(1, 1, 1, alphaWhileSelected);
 
             }
@@ -155,11 +166,11 @@ public partial class ItemSlot : ScriptableObject
 
     public void UpdateSlot()
     {
-        Backpack backpack = (Backpack)character.backpackSlot.itemInSlot;
+        Backpack backpack = (Backpack)character.backpackSlot.ItemInSlot;
 
         int itemSlots = backpack == null ? 0 : (int)backpack.ItemSlots.FlatBonus;
 
-        if (itemInSlot != null) itemInSlot.CurrentItemSlot = this;
+        if (ItemInSlot != null) ItemInSlot.CurrentItemSlot = this;
 
         if (slotNo.HasValue)
         {
@@ -180,22 +191,22 @@ public partial class ItemSlot : ScriptableObject
             SetItemSlotVisibility();
         }
         DropItem();
-        LastItem = itemInSlot;
+        LastItem = ItemInSlot;
     }
 
     public bool CanBePlaced(ItemSlot sourceItemSlot)
     {
-        return CanBePlaced(sourceItemSlot.itemInSlot);
+        return CanBePlaced(sourceItemSlot.ItemInSlot);
     }
 
 
     public bool CanBePlaced(Item item)
     {
-        if (itemInSlot == null)
+        if (ItemInSlot == null)
         {
             return CanBePlacedInternal(this, item);
         }
-        return CanBePlacedInternal(this, item) && CanBePlacedInternal(itemInSlot.CurrentItemSlot, itemInSlot);
+        return CanBePlacedInternal(this, item) && CanBePlacedInternal(ItemInSlot.CurrentItemSlot, ItemInSlot);
     }
 
     public static bool CanBePlacedInternal(ItemSlot itemSlot, Item item)
@@ -226,8 +237,8 @@ public partial class ItemSlot : ScriptableObject
     public ItemSlot Copy()
     {
         ItemSlot copy = ScriptableObject.CreateInstance<ItemSlot>();
-        copy.itemInSlot = itemInSlot;
-        copy.itemInSlot.itemSprite = itemInSlot.itemSprite; 
+        copy.ItemInSlot = ItemInSlot;
+        copy.ItemInSlot.itemSprite = ItemInSlot.itemSprite; 
         return copy;
     }
 
@@ -258,4 +269,11 @@ public partial class ItemSlot : ScriptableObject
     {
     }
 
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    [NotifyPropertyChangedInvocator]
+    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+    {
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
 }

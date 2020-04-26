@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 partial class CharacterBase
 {
@@ -29,9 +30,11 @@ partial class CharacterBase
     public CommonAttribute attackSpeed;
     public CommonAttribute attackWeaponRange;
 
-
+    public List<CommonAttribute> attributes; 
     private void InitializeList(Character character)
     {
+        attributes = new List<CommonAttribute>();
+        CommonAttribute.initList = attributes;
         vitality = new MainAttribute(BaseAttributes.vitality, character, AttributeType.Vitality);
         strength = new MainAttribute(BaseAttributes.strength, character, AttributeType.Strength);
         agility = new MainAttribute(BaseAttributes.agility, character, AttributeType.Agility);
@@ -66,6 +69,7 @@ partial class CharacterBase
         cooldownTimeReduction = new TimeAttribute(BaseAttributes.cooldownReduction, character, AttributeType.CooldownTimeReduction);
 
         attackSpeed = new CommonAttribute(BaseAttributes.attackSpeed, character, AttributeType.AttackSpeed);
+        CommonAttribute.initList = null;
     }
 }
 

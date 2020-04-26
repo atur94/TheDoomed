@@ -3,9 +3,7 @@
 [CreateAssetMenu(fileName = "New staff", menuName = "Inventory System Items/Weapon/Staff")]
 public class Staff : Weapon
 {
-    private AttackType _attackType = AttackType.Range;
-
-    public override AttackType AttackType => _attackType;
+    public override AttackType AttackType { get; } = AttackType.Range;
 
     public override void Initialize()
     {

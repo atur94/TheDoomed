@@ -16,11 +16,13 @@ MonoBehaviour:
   name: Heaven's legs
   StatsEffects:
   - isMainAttribute: 1
-    attributeType: 16
-    FlatBonus: 14
+    unit: 
+    attributeType: 15
+    FlatBonus: 11
     PercentBonus: 0
     order: 0
   - isMainAttribute: 0
+    unit: 
     attributeType: 0
     FlatBonus: 0
     PercentBonus: 0.4

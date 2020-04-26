@@ -30,9 +30,9 @@ public class Inventory : ScriptableObject
         for (int i = 0; i < (int)_backpack.ItemSlots.FlatBonus; i++)
         {
             ItemSlot currentSlot = inventorySlots[i];
-            if (currentSlot.itemInSlot == null)
+            if (currentSlot.ItemInSlot == null)
             {
-                currentSlot.itemInSlot = item;
+                currentSlot.ItemInSlot = item;
                 currentSlot.slotNo = i;
                 return;
             }
@@ -48,9 +48,9 @@ public class Inventory : ScriptableObject
 
     public void DropItem(ItemSlot slot)
     {
-        if (slot.itemInSlot == null) return;
-        DropItem(slot.itemInSlot);
-        slot.itemInSlot = null;
+        if (slot.ItemInSlot == null) return;
+        DropItem(slot.ItemInSlot);
+        slot.ItemInSlot = null;
     }
 
     private Backpack _backpack;
@@ -58,12 +58,9 @@ public class Inventory : ScriptableObject
 
     public void UpdateInventory()
     {
-        _backpack = (Backpack)backpackSlot.itemInSlot;
+        _backpack = (Backpack)backpackSlot.ItemInSlot;
         int lastSlots = _lastBackpack == null ? 0 : (int)_lastBackpack.ItemSlots.FlatBonus;
         int currentSlots = _backpack == null ? 0 : (int)_backpack.ItemSlots.FlatBonus;
-
-
-        int slotsDiffrence = currentSlots - lastSlots;
 
         for (int i = 0; i < inventorySlots.Count; i++)
         {

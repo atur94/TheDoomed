@@ -16,28 +16,27 @@ MonoBehaviour:
   name: 
   StatsEffects:
   - isMainAttribute: 1
-    unit: 25
-    attributeType: 4
-    FlatBonus: 0
-    PercentBonus: 0
-    order: 0
-  - isMainAttribute: 1
     unit: 
     attributeType: 24
-    FlatBonus: 1.2
-    PercentBonus: 0
+    FlatBonus: 1
+    PercentBonus: 3
     order: 0
   - isMainAttribute: 0
     unit: 
     attributeType: 14
     FlatBonus: 5
+    PercentBonus: 0.2
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 4
+    FlatBonus: 55
     PercentBonus: 0
     order: 0
   itemType: 0
-  itemModel: {fileID: 1302730346117758936, guid: 9da5cb74c5e184d49bd80cbab3908fe2,
+  itemModel: {fileID: 3694742124692885007, guid: a0a824513795f1146943dc93370563c8,
     type: 3}
   itemSprite: {fileID: 0}
   category: Equipment
   requiredLevel: 0
   projectilePrefab: {fileID: 0}
-  weaponOffset: {fileID: 0}

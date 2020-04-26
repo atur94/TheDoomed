@@ -33,9 +33,9 @@ public class ItemDisplayControl : ScriptableObject
             binder = displayInstance.GetComponent<ItemStatsWindowBinder>();
         }
 
-        if (binder != null && itemSlot.itemInSlot != null)
+        if (binder != null && itemSlot.ItemInSlot != null)
         {
-            Item item = itemSlot.itemInSlot;
+            Item item = itemSlot.ItemInSlot;
             binder.itemName.SetText(item.name);
             binder.typeValue.SetText(item.GetType().ToString());
             if (item is Equipment equipment)
