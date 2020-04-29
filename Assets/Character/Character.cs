@@ -194,6 +194,7 @@ public abstract partial class Character : CharacterBase, IDamagable
         inventory.UpdateInventory();
         NormalAttackCooldown();
 //        CurrentWeaponSelect();
+        _isCollecting = false;
 
     }
 
@@ -201,13 +202,11 @@ public abstract partial class Character : CharacterBase, IDamagable
 
     protected virtual void Update()
     {
-//        Attacking = false;
+        //        Attacking = false;
         characterController.Move(Time.fixedDeltaTime * 20f * Vector3.down);
-        _controller?.Loop();
-//        Move(MovingDirection);
         
         //        MovingDirection = Vector3.zero;
-        Move2();
+        Move();
         _lastPosition = transform.position;
     }
 
@@ -245,7 +244,7 @@ public abstract partial class Character : CharacterBase, IDamagable
     private Vector3 _lastPosition;
     public Vector3 CurrentLookVector;
 
-    private void Move2()
+    private void Move()
     {
         Debug.DrawRay(transform.position, LookingDirection, Color.magenta);
         Debug.DrawRay(transform.position, transform.forward, Color.red);
@@ -267,27 +266,6 @@ public abstract partial class Character : CharacterBase, IDamagable
         //        
 
     }
-
-    private void Move(Vector3 motion)
-    {
-        float timeRes = Time.deltaTime;
-        if (characterController != null)
-        { 
-            if (!disables.isStunned)
-            {
-                Vector3 moveDirection = timeRes * movementSpeed.Value * 0.06f * motion;
-                _moveVector = Vector3.Lerp(_moveVector, moveDirection, 0.03f * (1+turnRate.Value));
-                _moveVector.y = - 20f * timeRes;
-                characterController.Move(_moveVector);
-                if (characterController.velocity.magnitude > 0.1f)
-                {
-                    var position = transform.position;
-                    var diff = position - _lastPosition;
-                }
-            }
-        }
-    }
-
 
     public bool IsMoving
     {
@@ -348,12 +326,18 @@ public abstract partial class Character : CharacterBase, IDamagable
 
     public void NormalAttack(Vector3 direction)
     {
-        MovingDirection = Vector3.zero;
-
-        if (!IsMoving && weaponSlot.ItemInSlot != null)
+        if (!_isCollecting)
         {
-            Attacking = true;
+            MovingDirection = Vector3.zero;
+
+            if (!IsMoving && weaponSlot.ItemInSlot != null)
+            {
+                Attacking = true;
+            }
         }
+        
+
+
     }
 
     private protected Character() { }

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RangeDamageScript : DamageScriptBase
 {
-    public void Attack()
+    public override void Attack()
     {
         if (Character.weaponSlot.ItemInSlot is Bow bow)
         {

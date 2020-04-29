@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5459fd177b674f17b9e198279da95c8a, type: 3}
+  m_Name: TestBow
+  m_EditorClassIdentifier: 
+  id: 0
+  name: 
+  StatsEffects:
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 4
+    FlatBonus: 231
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 24
+    FlatBonus: 3
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 0
+    unit: 20
+    attributeType: 14
+    FlatBonus: 0
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 0
+    unit: 
+    attributeType: 10
+    FlatBonus: 0
+    PercentBonus: 0.4
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 25
+    FlatBonus: 30
+    PercentBonus: 0
+    order: 0
+  itemType: 0
+  itemModel: {fileID: 1982176211844380202, guid: f315ede69bbccb049b23a865506717f2,
+    type: 3}
+  itemSprite: {fileID: 0}
+  category: Equipment
+  requiredLevel: 0
+  projectilePrefab: {fileID: 0}

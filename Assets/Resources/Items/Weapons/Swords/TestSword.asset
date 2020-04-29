@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 424d14f5a57740598c5db78f5ede4602, type: 3}
+  m_Name: TestSword
+  m_EditorClassIdentifier: 
+  id: 0
+  name: Sword of power
+  StatsEffects:
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 24
+    FlatBonus: 1
+    PercentBonus: 3
+    order: 0
+  - isMainAttribute: 0
+    unit: 
+    attributeType: 14
+    FlatBonus: 5
+    PercentBonus: 0.2
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 4
+    FlatBonus: 55
+    PercentBonus: 0
+    order: 0
+  - isMainAttribute: 1
+    unit: 
+    attributeType: 25
+    FlatBonus: 3
+    PercentBonus: 0
+    order: 0
+  itemType: 0
+  itemModel: {fileID: 3694742124692885007, guid: a0a824513795f1146943dc93370563c8,
+    type: 3}
+  itemSprite: {fileID: 0}
+  category: Equipment
+  requiredLevel: 0
+  projectilePrefab: {fileID: 0}

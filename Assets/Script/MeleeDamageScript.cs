@@ -7,7 +7,7 @@ public class MeleeDamageScript : DamageScriptBase
 
     private TrailRenderer trailRenderer;
 
-    protected void Start()
+    protected override void Start()
     {
         base.Start();
         objectsHit = new List<IDamagable>();

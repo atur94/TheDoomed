@@ -69,6 +69,7 @@ partial class CharacterBase
         cooldownTimeReduction = new TimeAttribute(BaseAttributes.cooldownReduction, character, AttributeType.CooldownTimeReduction);
 
         attackSpeed = new CommonAttribute(BaseAttributes.attackSpeed, character, AttributeType.AttackSpeed);
+        attackWeaponRange = new CommonAttribute(BaseAttributes.attackRange, character, AttributeType.AttackWeaponRange);
         CommonAttribute.initList = null;
     }
 }

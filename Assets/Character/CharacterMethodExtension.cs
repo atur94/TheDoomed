@@ -2,8 +2,10 @@
 using UnityEngine;
 public abstract partial class Character
 {
+    private bool _isCollecting = false;
     public void Collect(Pickable pickable)
     {
+        _isCollecting = true;
         foreach (var eqSlot in itemSlots)
         {
             if (eqSlot != null && eqSlot.ItemInSlot == null && eqSlot.itemTypeRestriction == pickable._item.GetType() && eqSlot.CanBePlaced(pickable._item))

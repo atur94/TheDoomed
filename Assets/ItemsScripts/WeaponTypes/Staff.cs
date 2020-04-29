@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "New staff", menuName = "Inventory System Items/Weapon/Staff")]
-public class Staff : Weapon
+public class Staff : RangeWeaponBase
 {
     public override AttackType AttackType { get; } = AttackType.Range;
 

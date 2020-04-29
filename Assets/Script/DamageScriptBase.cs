@@ -6,16 +6,17 @@ public abstract class DamageScriptBase : MonoBehaviour
 {
     public Character Character { get; set; }
     protected float _raysHeight;
-    public float range = 2.3f;
+    public float range = 2f;
     public bool CanDealDamage { get; protected set; }
     protected int raysNumber = 4;
 
     public Transform weaponHandlerTransform;
 
-    protected void Start()
+    protected virtual void Start()
     {
         Character = GetComponentInParent<Character>();
         _raysHeight = Character.GetComponent<CharacterController>().height;
+        if (Character.attackWeaponRange != null) range = Character.attackWeaponRange.Value;
     }
 
     public virtual void Attack(Collider other)

@@ -5,7 +5,6 @@ using UnityEngine;
 public abstract class Weapon : Equipment
 {
     public virtual AttackType AttackType { get; }
-
     [SerializeField]
     private GameObject projectilePrefab;
 

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 
@@ -7,7 +8,14 @@ public class GameManager : MonoBehaviour
 {
     public Character controllableCharacter;
     public Texture2D CursorTexture;
+    public bool aIEnabled = true;
 
+    public List<Character> PlayersList { get; private set; }
+
+    void Awake()
+    {
+        EquipmentList.Instance.name = "Lista przedmiotów";
+    }
     // Use this for initialization
     void Start()
     {
@@ -17,5 +25,7 @@ public class GameManager : MonoBehaviour
         controllableCharacter = FindObjectOfType<Player>();
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
         CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
+        PlayersList = new List<Character>();
+
     }
 }

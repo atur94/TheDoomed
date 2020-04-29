@@ -8,7 +8,7 @@ public class GameAssets : MonoBehaviour
     {
         get
         {
-            var a =Resources.Load<GameAssets>("GameAssets");
+            var a = Resources.Load<GameAssets>("GameAssets");
             if (_instance == null) _instance = Instantiate(a);
             return _instance;
         }
