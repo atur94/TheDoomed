@@ -39,7 +39,7 @@ public class Pickable : MonoBehaviour, IPickable
 
     private void OnDrawGizmos()
     {
-        // Draw a yellow sphere at the transform's position
+        // Draw a yellow sphere at the transform's predictedPosition
         Gizmos.color = new Color(1f, 1f,0, 0.3f);
         Gizmos.DrawSphere(transform.position, radius);
     }

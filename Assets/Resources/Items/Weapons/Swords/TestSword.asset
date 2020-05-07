@@ -18,8 +18,8 @@ MonoBehaviour:
   - isMainAttribute: 1
     unit: 
     attributeType: 24
-    FlatBonus: 1
-    PercentBonus: 3
+    FlatBonus: 1.3
+    PercentBonus: 0
     order: 0
   - isMainAttribute: 0
     unit: 

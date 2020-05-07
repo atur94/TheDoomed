@@ -49,7 +49,7 @@ public class EnemySpawner : MonoBehaviour
 //
 //            if (_canBuild && _currentEnemyTemplate != null)
 //            {
-//                _currentEnemyTemplate.transform.position = _spawnPoint;
+//                _currentEnemyTemplate.transform.predictedPosition = _spawnPoint;
 //
 //                if (Input.GetMouseButtonDown(0))
 //                {

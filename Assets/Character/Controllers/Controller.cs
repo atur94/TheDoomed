@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Controller : MonoBehaviour
 {
@@ -97,5 +96,34 @@ public class Controller : MonoBehaviour
         }
 
         return closestEnemy.transform;
+    }
+}
+
+public class TargetInfo
+{
+    public Transform transform;
+    public bool isVisible;
+    public Vector3 predictedPosition;
+    public Vector3 position;
+    public Vector3 velocity;
+    public CharacterController characterController;
+
+    private TargetInfo()
+    {
+
+    }
+
+    public static TargetInfo Create(Transform transform)
+    {
+        if (transform == null) return null;
+        TargetInfo targetInfo = new TargetInfo();
+        targetInfo.transform = transform;
+        targetInfo.characterController = transform.GetComponent<CharacterController>();
+        if (targetInfo.characterController == null)
+        {
+            throw new NullReferenceException("No character controller");
+        }
+
+        return targetInfo;
     }
 }

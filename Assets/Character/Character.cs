@@ -305,7 +305,7 @@ public abstract partial class Character : CharacterBase, IDamagable
 //                    Damage damage = new Damage(physicalAttack.Value, magicPower.Value);
 //                    if (weapon.AttackType == AttackType.Range)
 //                    {
-//                       Projectile.CreateProjectile(weapon.ProjectileModel, damage, 60f, transform.position, target, Id);
+//                       Projectile.CreateProjectile(weapon.ProjectileModel, damage, 60f, transform.predictedPosition, target, Id);
 //                    }
 //                    else
 //                    {

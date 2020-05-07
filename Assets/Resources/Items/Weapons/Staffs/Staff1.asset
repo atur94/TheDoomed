@@ -36,7 +36,7 @@ MonoBehaviour:
   - isMainAttribute: 1
     unit: 
     attributeType: 25
-    FlatBonus: 40
+    FlatBonus: 20
     PercentBonus: 0
     order: 0
   itemType: 1
@@ -46,3 +46,4 @@ MonoBehaviour:
   category: Equipment
   requiredLevel: 0
   projectilePrefab: {fileID: 0}
+  bulletSpeed: 60

@@ -17,9 +17,9 @@ public class RangeDamageScript : DamageScriptBase
 
     private void StaffAttack(Staff staff)
     {
-        Damage damage = new Damage(Character.physicalAttack.Value, Character.magicPower.Value * 0.2f, Character);
+         Damage damage = new Damage(Character.physicalAttack.Value, Character.magicPower.Value * 0.2f, Character);
         var tr = Character.CurrentLookVector;
-        Projectile.CreateProjectile(staff.ProjectileModel, damage, 60f, GetComponentInParent<WeaponSelector>().leftHand.transform.position, tr, Character);
+        Projectile.CreateProjectile(staff.ProjectileModel, damage, staff.bulletSpeed, GetComponentInParent<WeaponSelector>().leftHand.transform.position, tr, Character);
 
     }
 
@@ -27,6 +27,6 @@ public class RangeDamageScript : DamageScriptBase
     {
         Damage damage = new Damage(Character.physicalAttack.Value, 0, Character);
         var tr = Character.CurrentLookVector;
-        Projectile.CreateProjectile(bow.ProjectileModel, damage, 60f, transform.position, tr, Character);
+        Projectile.CreateProjectile(bow.ProjectileModel, damage, bow.bulletSpeed, transform.position, tr, Character);
     }
 }
