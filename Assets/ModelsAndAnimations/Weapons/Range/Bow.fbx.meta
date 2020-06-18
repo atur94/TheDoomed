@@ -6,7 +6,12 @@ ModelImporter:
   - first:
       74: 1989289236423521904
     second: Default Take
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material__Axe_png0001_png
+    second: {fileID: 2100000, guid: b446a2ad9c0b23843a9bacb631753ca6, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0

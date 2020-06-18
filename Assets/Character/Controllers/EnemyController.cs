@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 
 [RequireComponent(typeof(CharacterController))]
@@ -28,6 +30,9 @@ public class EnemyController : Controller
     private float _trackNavMeshComputerCounter = 0f;
     private float _alertTime_counter = 0f;
     private Vector3 _alertDirection;
+    private float enemyFieldOfViewRange = 20f;
+
+
     protected override void Start()
     {
         base.Start();
@@ -98,7 +103,7 @@ public class EnemyController : Controller
             var modifiedPos = transform.position;
             modifiedPos.y = transform.position.y + characterController.height /3;
             Ray ray = new Ray(modifiedPos, rayDir);
-            if (Physics.Raycast(ray, out rayHit, 20f))
+            if (Physics.Raycast(ray, out rayHit, enemyFieldOfViewRange))
             {
                 if (rayHit.collider.gameObject.tag.Equals("Player"))
                 {
@@ -121,7 +126,7 @@ public class EnemyController : Controller
                     
                 }
             }
-            Debug.DrawRay(modifiedPos, rayDir * 20f);
+            Debug.DrawRay(modifiedPos, rayDir * enemyFieldOfViewRange);
         }
 
         _currentAngle += 350f * Time.deltaTime;
@@ -133,10 +138,10 @@ public class EnemyController : Controller
         return true;
     }
 
+    bool firstTime = true;
 
     protected override void FixedUpdate()
     {
-
         if (!gameManager.aIEnabled || _navMeshAgent == null)
         {
             character.Attacking = false;
@@ -156,6 +161,7 @@ public class EnemyController : Controller
             else
             {
                 BeAlerted();
+                firstTime = true;
             }
 
             return;
@@ -173,17 +179,21 @@ public class EnemyController : Controller
                 _trackVisionCounter -= Time.fixedDeltaTime;
                 _navMeshAgent.SetDestination(Target.position + Target.velocity * 2f);
                 Target.predictedPosition += Target.velocity * Time.deltaTime;
-
                 Debug.DrawRay(transform.position, 1.3f*(Target.predictedPosition - transform.position), Color.yellow);
                 if(Vector3.Distance(Vector3.ProjectOnPlane(transform.position, Vector3.up),Vector3.ProjectOnPlane(_navMeshAgent.destination, Vector3.up)) >= 1f)
                 {
                     character.MovingDirection = _navMeshAgent.steeringTarget - transform.position;
-                    _alertTime_counter = ALERT_TIME;
+                    if(firstTime)
+                    {
+                        _alertTime_counter = ALERT_TIME;
+                        firstTime = false;
+                    }
                     character.LookingDirection = Target.predictedPosition;
                 }
                 else
                 {
                     BeAlerted(true);
+//                    AlertedMoveToRandom();
                 }
             }
             else
@@ -196,6 +206,7 @@ public class EnemyController : Controller
             return;
         }
         _navMeshAgent.SetDestination(Target.predictedPosition);
+        firstTime = true;
         if (character.Attacking)
         {
             float bulletSpeed = 70f;
@@ -255,12 +266,30 @@ public class EnemyController : Controller
         {
             var randomAlert = Random.value * ALERT_TIME * 2;
             if (addTimeToTrackCounter)
+            {
                 _trackVisionCounter += randomAlert;
+                GetRandomPosition(enemyFieldOfViewRange * 0.6f);    
+            }
             _alertTime_counter = ALERT_TIME + randomAlert;
             _alertDirection = (character.CurrentLookVector) * -1 + Random.insideUnitSphere;
         }
     }
 
+    
+
+    void GetRandomPosition(float distance)
+    {
+        for(int i =0; i < 10; i++)
+        {
+            if (NavMesh.SamplePosition(transform.position + Random.onUnitSphere * distance, out var hit, distance, 1))
+            {
+                Debug.DrawRay(hit.position, Vector3.up * 3, Color.red, 2f);
+                Target.position = hit.position;
+                break;
+            }
+        }
+
+    }
 
     private Vector3 predictedPosition(Vector3 targetPosition, Vector3 shooterPosition, Vector3 targetVelocity, float projectileSpeed)
     {

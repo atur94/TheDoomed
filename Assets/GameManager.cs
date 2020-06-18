@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
     public bool aIEnabled = true;
 
     public List<Character> PlayersList { get; private set; }
+    public List<Character> CharacterList { get; private set; }
+    public List<Controller> ControllerList { get; private set; }
 
     void Awake()
     {
@@ -26,6 +28,8 @@ public class GameManager : MonoBehaviour
         CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
         CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
         PlayersList = new List<Character>();
+        CharacterList = new List<Character>();
+        ControllerList = new List<Controller>();
 
     }
 }

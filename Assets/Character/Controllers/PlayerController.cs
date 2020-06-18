@@ -16,4 +16,7 @@ public class PlayerController : Controller
             gameManager.PlayersList.Add(character);
         }
     }
+
+
+
 }

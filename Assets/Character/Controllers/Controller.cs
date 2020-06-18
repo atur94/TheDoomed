@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class Controller : MonoBehaviour
 {
+
     public bool IsPlayer { get; set; }
 
     public Character character;
@@ -17,6 +18,17 @@ public class Controller : MonoBehaviour
     {
         character = GetComponent<Character>();
         gameManager = FindObjectOfType<GameManager>();
+        AddToCharacters();
+    }
+
+
+    private void AddToCharacters()
+    {
+        if (character != null)
+        {
+            gameManager.CharacterList.Add(character);
+            gameManager.ControllerList.Add(this);
+        }
     }
 
     private void ActivePlayerControl()
@@ -48,6 +60,7 @@ public class Controller : MonoBehaviour
             }
         }
     }
+
 
     protected virtual void FixedUpdate()
     {

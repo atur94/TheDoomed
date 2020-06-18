@@ -18,10 +18,11 @@ public abstract partial class Character : CharacterBase, IDamagable
     private Animator _animator;
     private WeaponSelector _weaponSelector;
     public abstract KeyValuePair<int, string> group { get; }
+    public Light spotLight;
 
     public Disables disables;
 
-    private StatusBar statusBar;
+    public StatusBar statusBar;
 
     public CharacterController characterController;
     private Controller _controller;
@@ -57,6 +58,8 @@ public abstract partial class Character : CharacterBase, IDamagable
     public virtual void Start()
     {
         _animator = GetComponent<Animator>();
+        spotLight = GetComponentInChildren<Light>();
+
         _weaponSelector = transform.GetComponent<WeaponSelector>();
         Initialize(this);
         statusBar = transform.GetComponentInChildren<StatusBar>();
@@ -152,6 +155,7 @@ public abstract partial class Character : CharacterBase, IDamagable
         }
     }
 
+
     public void TakeDamage(Damage damage)
     {
         double physicalDamageReduction = 1 - (0.052 * physicalDefense.Value) / (0.9 + 0.048 * Mathf.Abs(physicalDefense.Value));
@@ -166,6 +170,7 @@ public abstract partial class Character : CharacterBase, IDamagable
         if (CurrentHealth > calculatedDamage)
         {
             CurrentHealth -= calculatedDamage;
+            statusBar.gameObject.SetActive(true);
         }
         else
         {
@@ -187,7 +192,9 @@ public abstract partial class Character : CharacterBase, IDamagable
         }
     }
 
-    private void FixedUpdate()
+
+
+    protected virtual void FixedUpdate()
     {
         disables.Reset();
         RegenerationPerSecond();
@@ -195,7 +202,13 @@ public abstract partial class Character : CharacterBase, IDamagable
         NormalAttackCooldown();
 //        CurrentWeaponSelect();
         _isCollecting = false;
+    }
 
+    private void LateUpdate()
+    {
+        if (spotLight == null) return;
+        spotLight.spotAngle = fieldOfViewAngle.Value;
+        spotLight.range = fieldOfViewRangeDark.Value;
     }
 
     private int? _lastWeaponHashCode;
@@ -204,7 +217,6 @@ public abstract partial class Character : CharacterBase, IDamagable
     {
         //        Attacking = false;
         characterController.Move(Time.fixedDeltaTime * 20f * Vector3.down);
-        
         //        MovingDirection = Vector3.zero;
         Move();
         _lastPosition = transform.position;
